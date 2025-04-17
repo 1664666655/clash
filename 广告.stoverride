@@ -1,0 +1,15 @@
+name: 'AWAvenue 广告规则'
+desc: '仅广告拦截，无分流'
+rule-providers:
+  awavenue-ads:
+    type: http
+    behavior: domain
+    format: yaml
+    path: ./rule_providers/AWAvenue-Ads-Rule-Clash.yaml
+    url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main//Filters/AWAvenue-Ads-Rule-Clash.yaml"
+    interval: 86400
+
+rules:
+  - DOMAIN-SUFFIX,fnnas.com,DIRECT
+  - DOMAIN-SUFFIX,nanshanya.art,DIRECT
+  - RULE-SET,awavenue-ads,REJECT

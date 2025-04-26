@@ -1,4 +1,4 @@
-# Stash Configuration File - Corrected for Manual Node Selection & Empty Subscription URL
+# Stash Configuration File - Automatic Node Selection & Empty Subscription URL
 # Update Interval: Daily (86400 seconds)
 
 # General Settings
@@ -146,7 +146,7 @@ proxy-groups:
     type: select
     proxies:
       - DIRECT # Allow direct connection
-      - 所有-自动 # Use the combined auto/manual group
+      - 所有-自动 # Use the url-test group
       - 港台日新韩-自动
       - 台日新韩-自动
       - 香港-自动
@@ -274,114 +274,16 @@ proxy-groups:
       - 其他-自动
       # REJECT might not be needed here, default should be DIRECT
 
-  # --- 2. Node Selection Groups (Select type, allows manual override of auto selection) ---
-  # These groups appear in the UI for manual selection. They list the auto-test group first, then individual nodes.
-  - name: 所有-自动 # Select group allowing manual choice
-    type: select
-    use: [origin] # Include all nodes from origin provider in the selection list
-    proxies:
-      - 所有-自动-UrlTest # Option to use the auto-selected node
-      - DIRECT            # Option for direct connection
-
-  - name: 港台日新韩-自动 # Select group allowing manual choice
-    type: select
-    use: [origin] # Use nodes from origin provider
-    filter: '(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)' # Filter nodes to show in the list
-    proxies:
-      - 港台日新韩-自动-UrlTest # Option to use the auto-selected node
-      - DIRECT
-
-  - name: 台日新韩-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
-    proxies:
-      - 台日新韩-自动-UrlTest
-      - DIRECT
-
-  - name: 火烧香港-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '火烧 \| 香港 0[1-8]'
-    proxies:
-      - 火烧香港-自动-UrlTest
-      # - DIRECT # Usually not needed for specific streaming nodes
-
-  - name: 火烧台湾-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '火烧 \| 台湾 0[1-5]'
-    proxies:
-      - 火烧台湾-自动-UrlTest
-      # - DIRECT
-
-  - name: 香港-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
-    proxies:
-      - 香港-自动-UrlTest
-      - DIRECT
-
-  - name: 台湾-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)'
-    proxies:
-      - 台湾-自动-UrlTest
-      - DIRECT
-
-  - name: 日本-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
-    proxies:
-      - 日本-自动-UrlTest
-      - DIRECT
-
-  - name: 新加坡-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
-    proxies:
-      - 新加坡-自动-UrlTest
-      - DIRECT
-
-  - name: 韩国-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)'
-    proxies:
-      - 韩国-自动-UrlTest
-      - DIRECT
-
-  - name: 美国-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
-    proxies:
-      - 美国-自动-UrlTest
-      - DIRECT
-
-  - name: 其他-自动 # Select group allowing manual choice
-    type: select
-    use: [origin]
-    filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
-    proxies:
-      - 其他-自动-UrlTest
-      - DIRECT
-
-  # --- 3. Underlying URL-Test Groups (Purely automatic selection) ---
-  # These groups perform the actual speed tests. They are selected by the groups above.
-  # Their names end with '-UrlTest' to distinguish them.
-  - name: 所有-自动-UrlTest
+  # --- 2. Node Selection Groups (url-test type, automatic selection) ---
+  # These groups perform speed tests and automatically select the fastest node.
+  - name: 所有-自动
     type: url-test
     use: [origin]
     url: http://www.gstatic.com/generate_204
     interval: 60
     tolerance: 150
 
-  - name: 港台日新韩-自动-UrlTest
+  - name: 港台日新韩-自动
     type: url-test
     use: [origin]
     filter: '(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
@@ -389,7 +291,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 台日新韩-自动-UrlTest
+  - name: 台日新韩-自动
     type: url-test
     use: [origin]
     filter: '(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
@@ -397,7 +299,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 火烧香港-自动-UrlTest
+  - name: 火烧香港-自动
     type: url-test
     use: [origin]
     filter: '火烧 \| 香港 0[1-8]'
@@ -405,7 +307,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 火烧台湾-自动-UrlTest
+  - name: 火烧台湾-自动
     type: url-test
     use: [origin]
     filter: '火烧 \| 台湾 0[1-5]'
@@ -413,7 +315,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 香港-自动-UrlTest
+  - name: 香港-自动
     type: url-test
     use: [origin]
     filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
@@ -421,7 +323,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 台湾-自动-UrlTest
+  - name: 台湾-自动
     type: url-test
     use: [origin]
     filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)'
@@ -429,7 +331,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 日本-自动-UrlTest
+  - name: 日本-自动
     type: url-test
     use: [origin]
     filter: '(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
@@ -437,7 +339,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 新加坡-自动-UrlTest
+  - name: 新加坡-自动
     type: url-test
     use: [origin]
     filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
@@ -445,7 +347,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 韩国-自动-UrlTest
+  - name: 韩国-自动
     type: url-test
     use: [origin]
     filter: '(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)'
@@ -453,7 +355,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 美国-自动-UrlTest
+  - name: 美国-自动
     type: url-test
     use: [origin]
     filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
@@ -461,7 +363,7 @@ proxy-groups:
     interval: 60
     tolerance: 150
 
-  - name: 其他-自动-UrlTest
+  - name: 其他-自动
     type: url-test
     use: [origin]
     filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'

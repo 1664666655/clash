@@ -1,4 +1,4 @@
-# Stash Configuration File - Modified for Manual Node Selection & Empty Subscription URL
+# Stash Configuration File - Corrected for Manual Node Selection & Empty Subscription URL
 # Update Interval: Daily (86400 seconds)
 
 # General Settings
@@ -141,6 +141,7 @@ rule-providers:
 # Proxy Groups
 proxy-groups:
   # --- 1. Policy Groups (Select type, define routing behavior) ---
+  # These groups determine which Node Selection Group to use based on rules.
   - name: 👽 AI1
     type: select
     proxies:
@@ -274,105 +275,105 @@ proxy-groups:
       # REJECT might not be needed here, default should be DIRECT
 
   # --- 2. Node Selection Groups (Select type, allows manual override of auto selection) ---
-  - name: 所有-自动 # Changed to select type
+  # These groups appear in the UI for manual selection. They list the auto-test group first, then individual nodes.
+  - name: 所有-自动 # Select group allowing manual choice
     type: select
+    use: [origin] # Include all nodes from origin provider in the selection list
     proxies:
-      - 所有-自动-UrlTest # Point to the actual url-test group
-      - DIRECT            # Optional: Allow direct connection choice here
-      # List all individual nodes from the provider
-      - use: [origin]
+      - 所有-自动-UrlTest # Option to use the auto-selected node
+      - DIRECT            # Option for direct connection
 
-  - name: 港台日新韩-自动 # Changed to select type
+  - name: 港台日新韩-自动 # Select group allowing manual choice
     type: select
+    use: [origin] # Use nodes from origin provider
+    filter: '(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)' # Filter nodes to show in the list
     proxies:
-      - 港台日新韩-自动-UrlTest # Point to the actual url-test group
+      - 港台日新韩-自动-UrlTest # Option to use the auto-selected node
       - DIRECT
-      # List individual nodes matching the filter
-      - use: [origin]
-        filter: '(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
 
-  - name: 台日新韩-自动 # Changed to select type
+  - name: 台日新韩-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
     proxies:
       - 台日新韩-自动-UrlTest
       - DIRECT
-      - use: [origin]
-        filter: '(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
 
-  - name: 火烧香港-自动 # Changed to select type
+  - name: 火烧香港-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '火烧 \| 香港 0[1-8]'
     proxies:
       - 火烧香港-自动-UrlTest
       # - DIRECT # Usually not needed for specific streaming nodes
-      - use: [origin]
-        filter: '火烧 \| 香港 0[1-8]'
 
-  - name: 火烧台湾-自动 # Changed to select type
+  - name: 火烧台湾-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '火烧 \| 台湾 0[1-5]'
     proxies:
       - 火烧台湾-自动-UrlTest
       # - DIRECT
-      - use: [origin]
-        filter: '火烧 \| 台湾 0[1-5]'
 
-  - name: 香港-自动 # Changed to select type
+  - name: 香港-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
     proxies:
       - 香港-自动-UrlTest
       - DIRECT
-      - use: [origin]
-        filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
 
-  - name: 台湾-自动 # Changed to select type
+  - name: 台湾-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)'
     proxies:
       - 台湾-自动-UrlTest
       - DIRECT
-      - use: [origin]
-        filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)'
 
-  - name: 日本-自动 # Changed to select type
+  - name: 日本-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
     proxies:
       - 日本-自动-UrlTest
       - DIRECT
-      - use: [origin]
-        filter: '(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
 
-  - name: 新加坡-自动 # Changed to select type
+  - name: 新加坡-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
     proxies:
       - 新加坡-自动-UrlTest
       - DIRECT
-      - use: [origin]
-        filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
 
-  - name: 韩国-自动 # Changed to select type
+  - name: 韩国-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)'
     proxies:
       - 韩国-自动-UrlTest
       - DIRECT
-      - use: [origin]
-        filter: '(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)'
 
-  - name: 美国-自动 # Changed to select type
+  - name: 美国-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
     proxies:
       - 美国-自动-UrlTest
       - DIRECT
-      - use: [origin]
-        filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
 
-  - name: 其他-自动 # Changed to select type
+  - name: 其他-自动 # Select group allowing manual choice
     type: select
+    use: [origin]
+    filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
     proxies:
       - 其他-自动-UrlTest
       - DIRECT
-      - use: [origin]
-        filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
 
   # --- 3. Underlying URL-Test Groups (Purely automatic selection) ---
   # These groups perform the actual speed tests. They are selected by the groups above.
+  # Their names end with '-UrlTest' to distinguish them.
   - name: 所有-自动-UrlTest
     type: url-test
     use: [origin]

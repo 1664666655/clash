@@ -1,0 +1,506 @@
+# Stash Configuration File - Modified for Manual Node Selection & Empty Subscription URL
+# Update Interval: Daily (86400 seconds)
+
+# General Settings
+general:
+  loglevel: info
+  # Mode: rule (Rule-based routing), global (Global proxy), direct (Global direct)
+  mode: rule
+  # Enable TUN interface for enhanced compatibility (Requires Stash 2.x+)
+  # tun-interface: true
+
+# DNS Settings
+dns:
+  enabled: true
+  ipv6: false
+  # Use Fake-IP for better compatibility with certain apps/services
+  enhanced-mode: fake-ip
+  # Fallback DNS servers if upstream fails
+  fallback:
+    - 119.29.29.29 # DNSPod
+    - 223.5.5.5    # AliDNS
+    - 1.1.1.1      # Cloudflare DNS
+    - 8.8.8.8      # Google DNS
+  # Default DNS servers
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 114.114.114.114 # 114DNS
+
+# Proxy Providers (Your Subscription)
+proxy-providers:
+  origin: # Name for your subscription provider
+    type: http
+    # !!! 在这里填入你的 Stash 订阅链接 !!!
+    # !!! Paste your Stash subscription URL here !!!
+    url: ""
+    # Path to store the downloaded proxy list
+    path: ./providers/origin.yaml
+    # Health check URL for nodes from this provider
+    health-check:
+      enable: true
+      url: http://www.gstatic.com/generate_204
+      interval: 600 # Check every 10 minutes
+    # Update interval: 86400 seconds = 24 hours
+    interval: 86400
+
+# Rule Providers (From your .ini template)
+# (Rule providers remain the same as before)
+rule-providers:
+  AI1:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/AI.list"
+    path: ./ruleset/AI1.list
+    interval: 86400
+  AI2:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/AI2.list"
+    path: ./ruleset/AI2.list
+    interval: 86400
+  GitHub:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GitHub/GitHub.list"
+    path: ./ruleset/GitHub.list
+    interval: 86400
+  TikTok:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/TikTok/TikTok.list"
+    path: ./ruleset/TikTok.list
+    interval: 86400
+  Telegram:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list"
+    path: ./ruleset/Telegram.list
+    interval: 86400
+  Streaming_YouTube_Lian:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/YouTube.list"
+    path: ./ruleset/Streaming_YouTube_Lian.list
+    interval: 86400
+  Streaming_YouTube_BM:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.list"
+    path: ./ruleset/Streaming_YouTube_BM.list
+    interval: 86400
+  Streaming_HBO:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/HBO/HBO.list"
+    path: ./ruleset/Streaming_HBO.list
+    interval: 86400
+  Streaming_Disney:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list"
+    path: ./ruleset/Streaming_Disney.list
+    interval: 86400
+  Streaming_Netflix:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list"
+    path: ./ruleset/Streaming_Netflix.list
+    interval: 86400
+  Streaming_Spotify:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.list"
+    path: ./ruleset/Streaming_Spotify.list
+    interval: 86400
+  Streaming_Sping:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/sping.list"
+    path: ./ruleset/Streaming_Sping.list
+    interval: 86400
+  Overseas_Check:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Check.list"
+    path: ./ruleset/Overseas_Check.list
+    interval: 86400
+  Overseas_Proxy:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Proxy.list"
+    path: ./ruleset/Overseas_Proxy.list
+    interval: 86400
+  Overseas_Global:
+    type: http
+    behavior: domain
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Global/Global.list"
+    path: ./ruleset/Overseas_Global.list
+    interval: 86400
+
+# Proxy Groups
+proxy-groups:
+  # --- 1. Policy Groups (Select type, define routing behavior) ---
+  - name: 👽 AI1
+    type: select
+    proxies:
+      - DIRECT # Allow direct connection
+      - 所有-自动 # Use the combined auto/manual group
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT # Block connection
+
+  - name: 👽 AI2
+    type: select
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+
+  - name: 📘 GitHub
+    type: select
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+
+  - name: 👯‍♂️ TikTok
+    type: select
+    proxies:
+      # TikTok often requires non-local IP, so DIRECT might not work well. Consider removing it.
+      # - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+
+  - name: 🙋 Telegram
+    type: select
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+
+  - name: 📀 流媒体
+    type: select
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 火烧香港-自动 # Specific group for streaming
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+
+  - name: 🌍 国外
+    type: select
+    proxies:
+      # Typically, overseas traffic goes through proxy, DIRECT might be less useful here.
+      # - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 火烧台湾-自动 # Specific group
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      # Consider adding REJECT if needed, or let it fall through to MATCH
+
+  - name: ➡️ 国内
+    type: select
+    proxies:
+      - DIRECT # Domestic traffic usually goes direct
+      - 所有-自动 # Fallback options if DIRECT fails or specific routing needed
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      # REJECT might not be needed here, default should be DIRECT
+
+  # --- 2. Node Selection Groups (Select type, allows manual override of auto selection) ---
+  - name: 所有-自动 # Changed to select type
+    type: select
+    proxies:
+      - 所有-自动-UrlTest # Point to the actual url-test group
+      - DIRECT            # Optional: Allow direct connection choice here
+      # List all individual nodes from the provider
+      - use: [origin]
+
+  - name: 港台日新韩-自动 # Changed to select type
+    type: select
+    proxies:
+      - 港台日新韩-自动-UrlTest # Point to the actual url-test group
+      - DIRECT
+      # List individual nodes matching the filter
+      - use: [origin]
+        filter: '(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
+
+  - name: 台日新韩-自动 # Changed to select type
+    type: select
+    proxies:
+      - 台日新韩-自动-UrlTest
+      - DIRECT
+      - use: [origin]
+        filter: '(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
+
+  - name: 火烧香港-自动 # Changed to select type
+    type: select
+    proxies:
+      - 火烧香港-自动-UrlTest
+      # - DIRECT # Usually not needed for specific streaming nodes
+      - use: [origin]
+        filter: '火烧 \| 香港 0[1-8]'
+
+  - name: 火烧台湾-自动 # Changed to select type
+    type: select
+    proxies:
+      - 火烧台湾-自动-UrlTest
+      # - DIRECT
+      - use: [origin]
+        filter: '火烧 \| 台湾 0[1-5]'
+
+  - name: 香港-自动 # Changed to select type
+    type: select
+    proxies:
+      - 香港-自动-UrlTest
+      - DIRECT
+      - use: [origin]
+        filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
+
+  - name: 台湾-自动 # Changed to select type
+    type: select
+    proxies:
+      - 台湾-自动-UrlTest
+      - DIRECT
+      - use: [origin]
+        filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)'
+
+  - name: 日本-自动 # Changed to select type
+    type: select
+    proxies:
+      - 日本-自动-UrlTest
+      - DIRECT
+      - use: [origin]
+        filter: '(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
+
+  - name: 新加坡-自动 # Changed to select type
+    type: select
+    proxies:
+      - 新加坡-自动-UrlTest
+      - DIRECT
+      - use: [origin]
+        filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
+
+  - name: 韩国-自动 # Changed to select type
+    type: select
+    proxies:
+      - 韩国-自动-UrlTest
+      - DIRECT
+      - use: [origin]
+        filter: '(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)'
+
+  - name: 美国-自动 # Changed to select type
+    type: select
+    proxies:
+      - 美国-自动-UrlTest
+      - DIRECT
+      - use: [origin]
+        filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
+
+  - name: 其他-自动 # Changed to select type
+    type: select
+    proxies:
+      - 其他-自动-UrlTest
+      - DIRECT
+      - use: [origin]
+        filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
+
+  # --- 3. Underlying URL-Test Groups (Purely automatic selection) ---
+  # These groups perform the actual speed tests. They are selected by the groups above.
+  - name: 所有-自动-UrlTest
+    type: url-test
+    use: [origin]
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 港台日新韩-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 台日新韩-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 火烧香港-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '火烧 \| 香港 0[1-8]'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 火烧台湾-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '火烧 \| 台湾 0[1-5]'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 香港-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 台湾-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 日本-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 新加坡-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 韩国-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 美国-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+  - name: 其他-自动-UrlTest
+    type: url-test
+    use: [origin]
+    filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
+    url: http://www.gstatic.com/generate_204
+    interval: 60
+    tolerance: 150
+
+# Rules Section
+# (Rules remain the same, pointing to the top-level policy groups)
+rules:
+  # --- Custom Rules based on Rule Providers ---
+  - RULE-SET,AI1,👽 AI1
+  - RULE-SET,AI2,👽 AI2
+  - RULE-SET,GitHub,📘 GitHub
+  - RULE-SET,TikTok,👯‍♂️ TikTok
+  - RULE-SET,Telegram,🙋 Telegram
+  # Streaming Rules (Map all streaming providers to the '流媒体' policy group)
+  - RULE-SET,Streaming_YouTube_Lian,📀 流媒体
+  - RULE-SET,Streaming_YouTube_BM,📀 流媒体
+  - RULE-SET,Streaming_HBO,📀 流媒体
+  - RULE-SET,Streaming_Disney,📀 流媒体
+  - RULE-SET,Streaming_Netflix,📀 流媒体
+  - RULE-SET,Streaming_Spotify,📀 流媒体
+  - RULE-SET,Streaming_Sping,📀 流媒体
+  # Overseas Rules (Map all overseas providers to the '国外' policy group)
+  - RULE-SET,Overseas_Check,🌍 国外
+  - RULE-SET,Overseas_Proxy,🌍 国外
+  - RULE-SET,Overseas_Global,🌍 国外
+
+  # --- Standard Rules ---
+  # Local Network / Private IPs -> DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,127.0.0.1/8,DIRECT
+  - IP-CIDR,100.64.0.0/10,DIRECT # CGNAT addresses
+
+  # China Mainland IPs -> Domestic Policy Group (➡️ 国内)
+  - GEOIP,CN,➡️ 国内
+
+  # Final Rule: Match anything else -> Overseas Policy Group (🌍 国外)
+  # This acts as the default for traffic not matching any rule above.
+  - MATCH,🌍 国外

@@ -1,22 +1,17 @@
-# Stash 設定檔片段 - 更正結構
+# Stash 設定檔片段 - 修正 FINAL 規則錯誤
 
 # 1. Proxy Providers (節點提供者)
-# !!! 請務必定義在 proxy-groups 之前 !!!
 proxy-providers:
-  # !!! 在下方填入您的訂閱連結 !!!
   SubscriptionNodes:
     type: http
     # 將下方的 URL 換成您的實際訂閱連結
     url: "YOUR_SUBSCRIPTION_URL_HERE"
-    # 下載的節點清單儲存路徑 (相對 Stash 設定檔目錄)
     path: ./proxies/sub1.yaml
-    # 自動更新間隔 (秒)，例如 1 小時
     interval: 3600
-    # 健康檢查 (用於 url-test, fallback 等)
     health-check:
       enable: true
       url: http://www.gstatic.com/generate_204
-      interval: 600 # 健康檢查間隔 (秒)
+      interval: 600
 
 # 2. Rule Providers (規則提供者)
 rule-providers:
@@ -221,6 +216,7 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
+  # --- 這個群組本身沒問題，只是不能作為 FINAL 的目標 ---
   - name: ➡️ 国内
     type: select
     proxies:
@@ -238,13 +234,12 @@ proxy-groups:
       - REJECT
 
   # --- URL-Test 策略組 ---
-  # 使用 'use' 關鍵字從訂閱中獲取節點進行測試
   - name: 所有-自动
     type: url-test
     url: 'http://www.gstatic.com/generate_204'
     interval: 60
     tolerance: 150
-    use: [SubscriptionNodes] # 使用訂閱節點
+    use: [SubscriptionNodes]
   - name: 港台日新韩-自动
     type: url-test
     url: 'http://www.gstatic.com/generate_204'
@@ -324,6 +319,7 @@ proxy-groups:
     # filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
 
 # 4. 規則 (Rules)
+# !!! 注意: 將 FINAL 規則的目標從 "➡️ 国内" 改為 "DIRECT" !!!
 rules:
   - RULE-PROVIDER,AI1_1,👽 AI1
   - RULE-PROVIDER,AI2_1,👽 AI2
@@ -340,4 +336,5 @@ rules:
   - RULE-PROVIDER,国外_1,🌍 国外
   - RULE-PROVIDER,国外_2,🌍 国外
   - RULE-PROVIDER,国外_3,🌍 国外
-  - FINAL,➡️ 国内
+  # 將最終規則指向 DIRECT (直連)
+  - FINAL,DIRECT

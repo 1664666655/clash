@@ -1,11 +1,10 @@
-# Stash 設定檔片段 - 修正 FINAL 規則錯誤
+# Stash 設定檔片段 - 修正 FINAL 規則錯誤 (使用 FALLBACK 群組)
 
 # 1. Proxy Providers (節點提供者)
 proxy-providers:
   SubscriptionNodes:
     type: http
-    # 將下方的 URL 換成您的實際訂閱連結
-    url: "YOUR_SUBSCRIPTION_URL_HERE"
+    url: "YOUR_SUBSCRIPTION_URL_HERE" # 請確保已填寫有效連結
     path: ./proxies/sub1.yaml
     interval: 3600
     health-check:
@@ -108,6 +107,12 @@ rule-providers:
 
 # 3. 策略組 (Proxy Groups)
 proxy-groups:
+  # --- 新增 FALLBACK 群組 ---
+  - name: FALLBACK
+    type: select
+    proxies:
+      - DIRECT
+
   # --- Select 策略組 ---
   - name: 👽 AI1
     type: select
@@ -124,6 +129,7 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
+      # - FALLBACK # 可選，如果希望手動選直連
   - name: 👽 AI2
     type: select
     proxies:
@@ -139,6 +145,7 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
+      # - FALLBACK
   - name: 📘 GitHub
     type: select
     proxies:
@@ -154,6 +161,7 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
+      # - FALLBACK
   - name: 👯‍♂️ TikTok
     type: select
     proxies:
@@ -169,6 +177,7 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
+      # - FALLBACK
   - name: 🙋 Telegram
     type: select
     proxies:
@@ -184,6 +193,7 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
+      # - FALLBACK
   - name: 📀 流媒体
     type: select
     proxies:
@@ -200,6 +210,7 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
+      # - FALLBACK
   - name: 🌍 国外
     type: select
     proxies:
@@ -216,8 +227,8 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
-  # --- 這個群組本身沒問題，只是不能作為 FINAL 的目標 ---
-  - name: ➡️ 国内
+      # - FALLBACK
+  - name: ➡️ 国内 # 這個群組仍然可以保留，用於其他可能的國內規則
     type: select
     proxies:
       - DIRECT
@@ -232,6 +243,7 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT
+      # - FALLBACK
 
   # --- URL-Test 策略組 ---
   - name: 所有-自动
@@ -319,7 +331,7 @@ proxy-groups:
     # filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
 
 # 4. 規則 (Rules)
-# !!! 注意: 將 FINAL 規則的目標從 "➡️ 国内" 改為 "DIRECT" !!!
+# !!! 注意: 將 FINAL 規則的目標改為新建的 "FALLBACK" 群組 !!!
 rules:
   - RULE-PROVIDER,AI1_1,👽 AI1
   - RULE-PROVIDER,AI2_1,👽 AI2
@@ -336,5 +348,5 @@ rules:
   - RULE-PROVIDER,国外_1,🌍 国外
   - RULE-PROVIDER,国外_2,🌍 国外
   - RULE-PROVIDER,国外_3,🌍 国外
-  # 將最終規則指向 DIRECT (直連)
-  - FINAL,DIRECT
+  # 將最終規則指向包含 DIRECT 的 FALLBACK 群組
+  - FINAL,FALLBACK

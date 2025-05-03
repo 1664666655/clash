@@ -1,17 +1,13 @@
-# Stash 配置文件
-# 请根据您的实际需求调整订阅链接和策略组设置
-
+# Stash 配置文件 - 
 mode: rule
 log-level: info
+allow-lan: true
+external-controller: 127.0.0.1:9090
 
 proxy-providers:
-  provider1:
+  default:
     type: http
-    url: https://example.com/subscription1.yaml
-    interval: 3600
-  provider2:
-    type: http
-    url: https://example.com/subscription2.yaml
+    url: https://example.com/subscription.yaml
     interval: 3600
 
 rule-providers:
@@ -40,52 +36,37 @@ rule-providers:
     behavior: classical
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list
     interval: 86400
-  Streaming:
+  YouTube:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/YouTube.list
-    interval: 86400
-  Streaming2:
-    type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.list
-    interval: 86400
-  HBO:
-    type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/HBO/HBO.list
-    interval: 86400
-  Disney:
-    type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list
     interval: 86400
   Netflix:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list
     interval: 86400
+  Disney:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list
+    interval: 86400
+  HBO:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/HBO/HBO.list
+    interval: 86400
   Spotify:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.list
     interval: 86400
-  Sping:
+  StreamingExtra:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/sping.list
     interval: 86400
   Global:
-    type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Check.list
-    interval: 86400
-  Proxy:
-    type: http
-    behavior: classical
-    url: https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Proxy.list
-    interval: 86400
-  Global2:
     type: http
     behavior: classical
     url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Global/Global.list
@@ -96,76 +77,78 @@ proxy-groups:
     type: select
     proxies:
       - DIRECT
-      - "Auto"
-      - "HK-Auto"
-      - "TW-Auto"
-      - "JP-Auto"
-      - "SG-Auto"
-      - "KR-Auto"
-      - "US-Auto"
-      - "Others-Auto"
+      - Auto
+      - HK-Auto
+      - TW-Auto
+      - JP-Auto
+      - SG-Auto
+      - KR-Auto
+      - US-Auto
+      - Others-Auto
       - REJECT
+  - name: "AI2"
+    type: select
+    proxies: ["AI1"]
+  - name: "GitHub"
+    type: select
+    proxies: ["AI1"]
+  - name: "TikTok"
+    type: select
+    proxies: ["AI1"]
+  - name: "Telegram"
+    type: select
+    proxies: ["AI1"]
+  - name: "Streaming"
+    type: select
+    proxies: ["AI1"]
+  - name: "Global"
+    type: select
+    proxies: ["AI1"]
   - name: "Auto"
     type: url-test
-    use:
-      - provider1
-      - provider2
+    use: [default]
     url: http://www.gstatic.com/generate_204
     interval: 300
   - name: "HK-Auto"
     type: url-test
-    use:
-      - provider1
-      - provider2
-    filter: "(?i)HK|Hong Kong|香港"
+    use: [default]
+    filter: "HK|Hong Kong|香港"
     url: http://www.gstatic.com/generate_204
     interval: 300
   - name: "TW-Auto"
     type: url-test
-    use:
-      - provider1
-      - provider2
-    filter: "(?i)TW|Taiwan|台灣|台湾"
+    use: [default]
+    filter: "TW|Taiwan|台灣|台湾"
     url: http://www.gstatic.com/generate_204
     interval: 300
   - name: "JP-Auto"
     type: url-test
-    use:
-      - provider1
-      - provider2
-    filter: "(?i)JP|Japan|日本"
+    use: [default]
+    filter: "JP|Japan|日本"
     url: http://www.gstatic.com/generate_204
     interval: 300
   - name: "SG-Auto"
     type: url-test
-    use:
-      - provider1
-      - provider2
-    filter: "(?i)SG|Singapore|新加坡"
+    use: [default]
+    filter: "SG|Singapore|新加坡"
     url: http://www.gstatic.com/generate_204
     interval: 300
   - name: "KR-Auto"
     type: url-test
-    use:
-      - provider1
-      - provider2
-    filter: "(?i)KR|Korea|韩国|韓國"
+    use: [default]
+    filter: "KR|Korea|韩国|韓國"
     url: http://www.gstatic.com/generate_204
     interval: 300
   - name: "US-Auto"
     type: url-test
-    use:
-      - provider1
-      - provider2
-    filter: "(?i)US|United States|美国"
+    use: [default]
+    filter: "US|United States|美国"
     url: http://www.gstatic.com/generate_204
     interval: 300
   - name: "Others-Auto"
     type: url-test
-    use:
-      - provider1
-      - provider2
-    filter: "(?i)Australia|UK|Germany|France|Canada|其他"
+    use: [default]
+    filter: "Australia|UK|Germany|France|Canada|其他"
     url: http://www.gstatic.com/generate_204
     interval: 300
 
@@ -175,15 +158,12 @@ rules:
   - RULE-SET,GitHub,GitHub
   - RULE-SET,TikTok,TikTok
   - RULE-SET,Telegram,Telegram
-  - RULE-SET,Streaming,Streaming
-  - RULE-SET,Streaming2,Streaming
-  - RULE-SET,HBO,Streaming
-  - RULE-SET,Disney,Streaming
+  - RULE-SET,YouTube,Streaming
   - RULE-SET,Netflix,Streaming
+  - RULE-SET,Disney,Streaming
+  - RULE-SET,HBO,Streaming
   - RULE-SET,Spotify,Streaming
-  - RULE-SET,Sping,Streaming
+  - RULE-SET,StreamingExtra,Streaming
   - RULE-SET,Global,Global
-  - RULE-SET,Proxy,Global
-  - RULE-SET,Global2,Global
   - GEOIP,CN,DIRECT
   - MATCH,Global

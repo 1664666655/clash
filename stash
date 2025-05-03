@@ -1,169 +1,329 @@
-# Stash 配置文件 - 
-mode: rule
-log-level: info
-allow-lan: true
-external-controller: 127.0.0.1:9090
+# Stash 設定檔片段 - 從 OpenClash INI 轉換
 
-proxy-providers:
-  default:
-    type: http
-    url: https://example.com/subscription.yaml
-    interval: 3600
-
+# 1. 規則提供者 (Rule Providers)
+# 對應 OpenClash 的 ruleset
 rule-providers:
-  AI1:
+  AI1_1:
+    type: http
+    behavior: classical # 或 domain，根據 .list 檔案內容調整
+    url: "https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI.list"
+    path: ./ruleset/AI1_1.list
+    interval: 86400 # 更新間隔 (秒)，例如 24 小時
+  AI2_1:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI.list
+    url: "https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI2.list"
+    path: ./ruleset/AI2_1.list
     interval: 86400
-  AI2:
+  GitHub_1:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI2.list
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GitHub/GitHub.list"
+    path: ./ruleset/GitHub_1.list
     interval: 86400
-  GitHub:
+  TikTok_1:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GitHub/GitHub.list
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/TikTok/TikTok.list"
+    path: ./ruleset/TikTok_1.list
     interval: 86400
-  TikTok:
+  Telegram_1:
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/TikTok/TikTok.list
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list"
+    path: ./ruleset/Telegram_1.list
     interval: 86400
-  Telegram:
+  流媒体_1: # YouTube liandu2024
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list
+    url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/YouTube.list"
+    path: ./ruleset/Stream_1_YouTube_liandu.list
     interval: 86400
-  YouTube:
+  流媒体_2: # YouTube blackmatrix7
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/YouTube.list
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.list"
+    path: ./ruleset/Stream_2_YouTube_blackmatrix.list
     interval: 86400
-  Netflix:
+  流媒体_3: # HBO
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/HBO/HBO.list"
+    path: ./ruleset/Stream_3_HBO.list
     interval: 86400
-  Disney:
+  流媒体_4: # Disney
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list"
+    path: ./ruleset/Stream_4_Disney.list
     interval: 86400
-  HBO:
+  流媒体_5: # Netflix
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/HBO/HBO.list
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list"
+    path: ./ruleset/Stream_5_Netflix.list
     interval: 86400
-  Spotify:
+  流媒体_6: # Spotify
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.list
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.list"
+    path: ./ruleset/Stream_6_Spotify.list
     interval: 86400
-  StreamingExtra:
+  流媒体_7: # sping
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/sping.list
+    url: "https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/sping.list"
+    path: ./ruleset/Stream_7_sping.list
     interval: 86400
-  Global:
+  国外_1: # Check liandu2024
     type: http
     behavior: classical
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Global/Global.list
+    url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Check.list"
+    path: ./ruleset/Global_1_Check_liandu.list
+    interval: 86400
+  国外_2: # Proxy liandu2024
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Proxy.list"
+    path: ./ruleset/Global_2_Proxy_liandu.list
+    interval: 86400
+  国外_3: # Global blackmatrix7
+    type: http
+    behavior: classical
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Global/Global.list"
+    path: ./ruleset/Global_3_Global_blackmatrix.list
     interval: 86400
 
+# 2. 策略組 (Proxy Groups)
 proxy-groups:
-  - name: "AI1"
+  # --- Select 策略組 (對應 OpenClash 域名組-節點組) ---
+  - name: 👽 AI1
     type: select
     proxies:
       - DIRECT
-      - Auto
-      - HK-Auto
-      - TW-Auto
-      - JP-Auto
-      - SG-Auto
-      - KR-Auto
-      - US-Auto
-      - Others-Auto
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
       - REJECT
-  - name: "AI2"
+  - name: 👽 AI2
     type: select
-    proxies: ["AI1"]
-  - name: "GitHub"
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+  - name: 📘 GitHub
     type: select
-    proxies: ["AI1"]
-  - name: "TikTok"
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+  - name: 👯‍♂️ TikTok
     type: select
-    proxies: ["AI1"]
-  - name: "Telegram"
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+  - name: 🙋 Telegram
     type: select
-    proxies: ["AI1"]
-  - name: "Streaming"
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+  - name: 📀 流媒体
     type: select
-    proxies: ["AI1"]
-  - name: "Global"
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 火烧香港-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+  - name: 🌍 国外
     type: select
-    proxies: ["AI1"]
-  - name: "Auto"
-    type: url-test
-    use: [default]
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-  - name: "HK-Auto"
-    type: url-test
-    use: [default]
-    filter: "HK|Hong Kong|香港"
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-  - name: "TW-Auto"
-    type: url-test
-    use: [default]
-    filter: "TW|Taiwan|台灣|台湾"
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-  - name: "JP-Auto"
-    type: url-test
-    use: [default]
-    filter: "JP|Japan|日本"
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-  - name: "SG-Auto"
-    type: url-test
-    use: [default]
-    filter: "SG|Singapore|新加坡"
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-  - name: "KR-Auto"
-    type: url-test
-    use: [default]
-    filter: "KR|Korea|韩国|韓國"
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-  - name: "US-Auto"
-    type: url-test
-    use: [default]
-    filter: "US|United States|美国"
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-  - name: "Others-Auto"
-    type: url-test
-    use: [default]
-    filter: "Australia|UK|Germany|France|Canada|其他"
-    url: http://www.gstatic.com/generate_204
-    interval: 300
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 火烧台湾-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+  - name: ➡️ 国内
+    type: select
+    proxies:
+      - DIRECT
+      - 所有-自动
+      - 港台日新韩-自动
+      - 台日新韩-自动
+      - 香港-自动
+      - 台湾-自动
+      - 日本-自动
+      - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
 
+  # --- URL-Test 策略組 (對應 OpenClash 節點組) ---
+  # !!! 注意: 下方的 proxies 列表需要您手動填入符合條件的節點或使用 'use' 關鍵字 !!!
+  - name: 所有-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60  # OpenClash 單位不明，假設為秒
+    tolerance: 150 # 延遲容差 (ms)
+    proxies: [] # 請手動填入所有節點，或使用 use: [ProviderName]
+                  # 原始 OpenClash Filter: .*
+  - name: 港台日新韩-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (廣港|廣台|廣日|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)
+  - name: 台日新韩-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (广台|广日|广新|广韩|广美|台湾|TW|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)
+  - name: 火烧香港-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (火烧 \| 香港 0[1-8]) 或使用 use: [...]
+                  # 原始 OpenClash Filter: 火烧 \| 香港 0[1-8]
+  - name: 火烧台湾-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (火烧 \| 台湾 0[1-5]) 或使用 use: [...]
+                  # 原始 OpenClash Filter: 火烧 \| 台湾 0[1-5]
+  - name: 香港-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (广港|香港|HK|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (广港|香港|HK|Hong Kong|🇭🇰|HongKong)
+  - name: 台湾-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (广台|台湾|台灣|TW|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)
+  - name: 日本-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (广日|日本|JP|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)
+  - name: 新加坡-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (广新|新加坡|SG|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)
+  - name: 韩国-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (广韩|韩国|韓國|KR|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)
+  - name: 美国-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (广美|美|US|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)
+  - name: 其他-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    proxies: [] # 請手動填入符合條件的節點 (波|柬|尼|...) 或使用 use: [...]
+                  # 原始 OpenClash Filter: (波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)
+
+# 3. 規則 (Rules)
 rules:
-  - RULE-SET,AI1,AI1
-  - RULE-SET,AI2,AI2
-  - RULE-SET,GitHub,GitHub
-  - RULE-SET,TikTok,TikTok
-  - RULE-SET,Telegram,Telegram
-  - RULE-SET,YouTube,Streaming
-  - RULE-SET,Netflix,Streaming
-  - RULE-SET,Disney,Streaming
-  - RULE-SET,HBO,Streaming
-  - RULE-SET,Spotify,Streaming
-  - RULE-SET,StreamingExtra,Streaming
-  - RULE-SET,Global,Global
-  - GEOIP,CN,DIRECT
-  - MATCH,Global
+  - RULE-PROVIDER,AI1_1,👽 AI1
+  - RULE-PROVIDER,AI2_1,👽 AI2
+  - RULE-PROVIDER,GitHub_1,📘 GitHub
+  - RULE-PROVIDER,TikTok_1,👯‍♂️ TikTok
+  - RULE-PROVIDER,Telegram_1,🙋 Telegram
+  - RULE-PROVIDER,流媒体_1,📀 流媒体 # YouTube liandu2024
+  - RULE-PROVIDER,流媒体_2,📀 流媒体 # YouTube blackmatrix7
+  - RULE-PROVIDER,流媒体_3,📀 流媒体 # HBO
+  - RULE-PROVIDER,流媒体_4,📀 流媒体 # Disney
+  - RULE-PROVIDER,流媒体_5,📀 流媒体 # Netflix
+  - RULE-PROVIDER,流媒体_6,📀 流媒体 # Spotify
+  - RULE-PROVIDER,流媒体_7,📀 流媒体 # sping
+  - RULE-PROVIDER,国外_1,🌍 国外     # Check liandu2024
+  - RULE-PROVIDER,国外_2,🌍 国外     # Proxy liandu2024
+  - RULE-PROVIDER,国外_3,🌍 国外     # Global blackmatrix7
+  # 根據 OpenClash `ruleset=➡️ 国内,[]FINAL` 的推斷，將 FINAL 規則指向 "➡️ 国内" 策略組
+  # 如果您希望最終流量走其他策略，請修改下方的策略組名稱
+  - FINAL,➡️ 国内

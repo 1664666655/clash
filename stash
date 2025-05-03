@@ -1,6 +1,7 @@
-# Stash 設定檔片段 - 從 OpenClash INI 轉換 (包含訂閱連結佔位符)
+# Stash 設定檔片段 - 更正結構
 
 # 1. Proxy Providers (節點提供者)
+# !!! 請務必定義在 proxy-groups 之前 !!!
 proxy-providers:
   # !!! 在下方填入您的訂閱連結 !!!
   SubscriptionNodes:
@@ -18,7 +19,6 @@ proxy-providers:
       interval: 600 # 健康檢查間隔 (秒)
 
 # 2. Rule Providers (規則提供者)
-# 對應 OpenClash 的 ruleset
 rule-providers:
   AI1_1:
     type: http
@@ -232,3 +232,112 @@ proxy-groups:
       - 台湾-自动
       - 日本-自动
       - 新加坡-自动
+      - 韩国-自动
+      - 美国-自动
+      - 其他-自动
+      - REJECT
+
+  # --- URL-Test 策略組 ---
+  # 使用 'use' 關鍵字從訂閱中獲取節點進行測試
+  - name: 所有-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes] # 使用訂閱節點
+  - name: 港台日新韩-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
+  - name: 台日新韩-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
+  - name: 火烧香港-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '火烧 \| 香港 0[1-8]'
+  - name: 火烧台湾-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '火烧 \| 台湾 0[1-5]'
+  - name: 香港-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
+  - name: 台湾-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)'
+  - name: 日本-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
+  - name: 新加坡-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
+  - name: 韩国-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)'
+  - name: 美国-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
+  - name: 其他-自动
+    type: url-test
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 60
+    tolerance: 150
+    use: [SubscriptionNodes]
+    # filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
+
+# 4. 規則 (Rules)
+rules:
+  - RULE-PROVIDER,AI1_1,👽 AI1
+  - RULE-PROVIDER,AI2_1,👽 AI2
+  - RULE-PROVIDER,GitHub_1,📘 GitHub
+  - RULE-PROVIDER,TikTok_1,👯‍♂️ TikTok
+  - RULE-PROVIDER,Telegram_1,🙋 Telegram
+  - RULE-PROVIDER,流媒体_1,📀 流媒体
+  - RULE-PROVIDER,流媒体_2,📀 流媒体
+  - RULE-PROVIDER,流媒体_3,📀 流媒体
+  - RULE-PROVIDER,流媒体_4,📀 流媒体
+  - RULE-PROVIDER,流媒体_5,📀 流媒体
+  - RULE-PROVIDER,流媒体_6,📀 流媒体
+  - RULE-PROVIDER,流媒体_7,📀 流媒体
+  - RULE-PROVIDER,国外_1,🌍 国外
+  - RULE-PROVIDER,国外_2,🌍 国外
+  - RULE-PROVIDER,国外_3,🌍 国外
+  - FINAL,➡️ 国内

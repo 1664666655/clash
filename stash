@@ -1,33 +1,3 @@
-# Stash Config Generated based on User Request - Revision 2
-# Structure flattened, removing Final/Proxy groups as requested.
-# Functional groups now directly select auto-groups or DIRECT/REJECT.
-# PLEASE REPLACE THE PLACEHOLDER SUBSCRIPTION URL BELOW!
-
-# 通用设置 (General Settings)
-mode: rule
-log-level: info
-# DNS 模块 (DNS Module)
-dns:
-  default-nameserver:
-    - 119.29.29.29
-    - 223.5.5.5
-  nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-  fake-ip-filter:
-    - "*"
-    - "+.lan"
-    - "+.local"
-
-# 服务提供商 (Proxy Providers) - YOU MUST EDIT THE URL HERE
-proxy-providers:
-  Subscribe:
-    # !!! IMPORTANT: Replace this URL with your actual subscription link !!!
-    url: http://your-placeholder-subscription-url
-    interval: 86400 # Update interval in seconds (86400 = 1 day)
-    benchmark-url: http://www.gstatic.com/generate_204
-    benchmark-timeout: 5
-
 # 策略组 (Proxy Groups)
 proxy-groups:
   # --- Functional Groups (Now include Manual options) ---

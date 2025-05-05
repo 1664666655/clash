@@ -1,4 +1,4 @@
-# Stash Config Generated based on User Request - Revision 2
+# Stash Config Generated based on User Request - Revision 2 (with Manual Groups Added)
 # Structure flattened, removing Final/Proxy groups as requested.
 # Functional groups now directly select auto-groups or DIRECT/REJECT.
 # PLEASE REPLACE THE PLACEHOLDER SUBSCRIPTION URL BELOW!
@@ -23,17 +23,18 @@ dns:
 proxy-providers:
   Subscribe:
     # !!! IMPORTANT: Replace this URL with your actual subscription link !!!
-    url: http://your-placeholder-subscription-url
+    url: http://your-placeholder-subscription-url # [记得替换]
     interval: 86400 # Update interval in seconds (86400 = 1 day)
     benchmark-url: http://www.gstatic.com/generate_204
     benchmark-timeout: 5
 
 # 策略组 (Proxy Groups)
 proxy-groups:
-  # --- Functional Groups (Directly selecting Auto groups or DIRECT/REJECT) ---
+  # --- Functional Groups (Now include Manual options) ---
   - name: 👽 AI1
     type: select
     proxies:
+      - 美国-手动  # <-- 新增手动选项
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -50,6 +51,7 @@ proxy-groups:
   - name: 👽 AI2
     type: select
     proxies:
+      - 美国-手动  # <-- 新增手动选项
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -114,6 +116,7 @@ proxy-groups:
   - name: 📀 流媒体
     type: select
     proxies:
+      - 香港-手动  # <-- 新增手动选项
       - DIRECT
       - 所有-自动
       - 火烧香港-自动 # Included as per original config
@@ -160,6 +163,20 @@ proxy-groups:
       - 美国-自动
       - 其他-自动
       - REJECT # Usually not needed for domestic group
+
+  # --- 新增手动选择组 ---
+  - name: 美国-手动
+    type: select
+    use:
+      - Subscribe
+    filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)' # 基于 美国-自动 组的过滤器
+
+  - name: 香港-手动
+    type: select
+    use:
+      - Subscribe
+    filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)' # 基于 香港-自动 组的过滤器
+
 
   # --- Auto Groups (URL-Test, based on User Filters) ---
   # These groups automatically select the best node from your subscription based on the filter

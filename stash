@@ -1,4 +1,4 @@
-# Stash Config Generated based on User Request - Revision 2 (with Manual Groups Added)
+# Stash Config Generated based on User Request - Revision 2
 # Structure flattened, removing Final/Proxy groups as requested.
 # Functional groups now directly select auto-groups or DIRECT/REJECT.
 # PLEASE REPLACE THE PLACEHOLDER SUBSCRIPTION URL BELOW!
@@ -23,7 +23,7 @@ dns:
 proxy-providers:
   Subscribe:
     # !!! IMPORTANT: Replace this URL with your actual subscription link !!!
-    url: http://your-placeholder-subscription-url # [记得替换]
+    url: http://your-placeholder-subscription-url
     interval: 86400 # Update interval in seconds (86400 = 1 day)
     benchmark-url: http://www.gstatic.com/generate_204
     benchmark-timeout: 5

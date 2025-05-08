@@ -1,4 +1,4 @@
-# Stash Config Generated based on User Request - Revision 2
+# Stash Config Generated based on User Request - Revision 2 3333
 # Structure flattened, removing Final/Proxy groups as requested.
 # Functional groups now directly select auto-groups or DIRECT/REJECT.
 # PLEASE REPLACE THE PLACEHOLDER SUBSCRIPTION URL BELOW!
@@ -51,8 +51,8 @@ proxy-groups:
   - name: 👽 AI2
     type: select
     proxies:
-      - 美国-手动  # <-- 新增手动选项
-      - 新加坡-手动  # <-- 新增
+      - 美国-手动
+      - 新加坡-手动  # <-- 新增手动选项
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -172,17 +172,17 @@ proxy-groups:
       - Subscribe
     filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)' # 基于 美国-自动 组的过滤器
 
- - name: 新加坡-手动
-    type: select
-    use:
-      - Subscribe
-    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
- 
-- name: 香港-手动
+  - name: 香港-手动
     type: select
     use:
       - Subscribe
     filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)' # 基于 香港-自动 组的过滤器
+
+  - name: 新加坡-手动
+    type: select
+    use:
+      - Subscribe
+    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)' # 基于 新加坡-自动 组的过滤器
 
 
   # --- Auto Groups (URL-Test, based on User Filters) ---

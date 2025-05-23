@@ -386,7 +386,12 @@ rule-providers:
 
 # 规则 (Rules)
 rules:
-  # User Defined Rules
+  - DOMAIN-SUFFIX,nanshanya.xyz,➡️ 国内
+  - DOMAIN-SUFFIX,nanshanya.art,➡️ 国内
+  - DOMAIN-SUFFIX,47010070.xyz,➡️ 国内
+  - DOMAIN,sunpanel.nanshanya.art,➡️ 国内
+
+# User Defined Rules
   - RULE-SET,AI1,👽 AI1
   - RULE-SET,AI2,👽 AI2
   - RULE-SET,GitHub,📘 GitHub

@@ -1,40 +1,83 @@
-# Stash Config Generated based on User Request - Revision 2 3333
-# Structure flattened, removing Final/Proxy groups as requested.
-# Functional groups now directly select auto-groups or DIRECT/REJECT.
-# PLEASE REPLACE THE PLACEHOLDER SUBSCRIPTION URL BELOW!
-
-# 通用设置 (General Settings)
 mode: rule
 log-level: info
-# DNS 模块 (DNS Module)
+
 dns:
   default-nameserver:
     - 119.29.29.29
     - 223.5.5.5
+    - 8.8.8.8
   nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+    - https://dns.cloudflare.com/dns-query
+    - https://dns.google/dns-query
   fake-ip-filter:
     - "*"
     - "+.lan"
     - "+.local"
 
-# 服务提供商 (Proxy Providers) - YOU MUST EDIT THE URL HERE
 proxy-providers:
   Subscribe:
-    # !!! IMPORTANT: Replace this URL with your actual subscription link !!!
-    url: http://your-placeholder-subscription-url
-    interval: 86400 # Update interval in seconds (86400 = 1 day)
+    url: http://your-subscription-url
+    interval: 86400
     benchmark-url: http://www.gstatic.com/generate_204
     benchmark-timeout: 5
 
-# 策略组 (Proxy Groups)
 proxy-groups:
-  # --- Functional Groups (Now include Manual options) ---
+  # --- 地区 Fallback 组 ---
+  - name: 美国-fallback
+    type: fallback
+    use:
+      - Subscribe
+    filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
+
+  - name: 香港-fallback
+    type: fallback
+    use:
+      - Subscribe
+    filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
+
+  - name: 台湾-fallback
+    type: fallback
+    use:
+      - Subscribe
+    filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|TaiWan|Taiwan)'
+
+  - name: 日本-fallback
+    type: fallback
+    use:
+      - Subscribe
+    filter: '(广日|日本|JP|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
+
+  - name: 新加坡-fallback
+    type: fallback
+    use:
+      - Subscribe
+    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
+
+  - name: 韩国-fallback
+    type: fallback
+    use:
+      - Subscribe
+    filter: '(广韩|韩国|KR|首尔|春川|🇰🇷|Korea)'
+
+  - name: 其他-fallback
+    type: fallback
+    use:
+      - Subscribe
+    filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
+
+  # --- 功能组 (每组带 Fallback) ---
   - name: 👽 AI1
     type: select
     proxies:
-      - 美国-手动  # <-- 新增手动选项
+      - 美国-fallback
+      - 香港-fallback
+      - 日本-fallback
+      - 台湾-fallback
+      - 新加坡-fallback
+      - 韩国-fallback
+      - 其他-fallback
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -51,8 +94,13 @@ proxy-groups:
   - name: 👽 AI2
     type: select
     proxies:
-      - 美国-手动
-      - 新加坡-手动  # <-- 新增手动选项
+      - 美国-fallback
+      - 新加坡-fallback
+      - 香港-fallback
+      - 日本-fallback
+      - 台湾-fallback
+      - 韩国-fallback
+      - 其他-fallback
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -69,6 +117,13 @@ proxy-groups:
   - name: 📘 GitHub
     type: select
     proxies:
+      - 香港-fallback
+      - 台湾-fallback
+      - 日本-fallback
+      - 新加坡-fallback
+      - 美国-fallback
+      - 韩国-fallback
+      - 其他-fallback
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -85,6 +140,13 @@ proxy-groups:
   - name: 👯‍♂️ TikTok
     type: select
     proxies:
+      - 台湾-fallback
+      - 日本-fallback
+      - 新加坡-fallback
+      - 美国-fallback
+      - 香港-fallback
+      - 韩国-fallback
+      - 其他-fallback
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -101,6 +163,13 @@ proxy-groups:
   - name: 🙋 Telegram
     type: select
     proxies:
+      - 香港-fallback
+      - 日本-fallback
+      - 新加坡-fallback
+      - 美国-fallback
+      - 台湾-fallback
+      - 韩国-fallback
+      - 其他-fallback
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -117,7 +186,13 @@ proxy-groups:
   - name: 📀 流媒体
     type: select
     proxies:
-      - 香港-手动  # <-- 新增手动选项
+      - 香港-fallback
+      - 日本-fallback
+      - 新加坡-fallback
+      - 台湾-fallback
+      - 美国-fallback
+      - 韩国-fallback
+      - 其他-fallback
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
@@ -134,10 +209,16 @@ proxy-groups:
   - name: 🌍 国外
     type: select
     proxies:
+      - 美国-fallback
+      - 香港-fallback
+      - 台湾-fallback
+      - 日本-fallback
+      - 新加坡-fallback
+      - 韩国-fallback
+      - 其他-fallback
       - DIRECT
       - 所有-自动
       - 港台日新韩-自动
-      - 牛逼台湾-自动 # Included as per original config
       - 台日新韩-自动
       - 香港-自动
       - 台湾-自动
@@ -148,10 +229,17 @@ proxy-groups:
       - 其他-自动
       - REJECT
 
-  - name: ➡️ 国内 # Added back from original config
+  - name: ➡️ 国内
     type: select
     proxies:
-      - DIRECT # Default for domestic should be DIRECT
+      - DIRECT
+      - 香港-fallback
+      - 台湾-fallback
+      - 日本-fallback
+      - 新加坡-fallback
+      - 美国-fallback
+      - 韩国-fallback
+      - 其他-fallback
       - 所有-自动
       - 港台日新韩-自动
       - 台日新韩-自动
@@ -162,30 +250,9 @@ proxy-groups:
       - 韩国-自动
       - 美国-自动
       - 其他-自动
-      - REJECT # Usually not needed for domestic group
+      - REJECT
 
-  # --- 新增手动选择组 ---
-  - name: 美国-手动
-    type: select
-    use:
-      - Subscribe
-    filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)' # 基于 美国-自动 组的过滤器
-
-  - name: 香港-手动
-    type: select
-    use:
-      - Subscribe
-    filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)' # 基于 香港-自动 组的过滤器
-
-  - name: 新加坡-手动
-    type: select
-    use:
-      - Subscribe
-    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)' # 基于 新加坡-自动 组的过滤器
-
-
-  # --- Auto Groups (URL-Test, based on User Filters) ---
-  # These groups automatically select the best node from your subscription based on the filter
+  # --- 现有自动分组，保留原有功能 ---
   - name: 所有-自动
     type: url-test
     url: http://www.gstatic.com/generate_204
@@ -193,8 +260,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '^(?=.*(.))(?!.*((?i)群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|(\b(USE|USED|TOTAL|Traffic|Expire|EMAIL|Panel|Channel|Author)\b|(\d{4}-\d{2}-\d{2}|\d+G)))).*$'
-    # hidden: true # You might want to unhide these if you want to see them as separate groups in UI
 
   - name: 港台日新韩-自动
     type: url-test
@@ -203,8 +268,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
-    # hidden: true
 
   - name: 台日新韩-自动
     type: url-test
@@ -213,18 +276,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)'
-    # hidden: true
-
-  - name: 牛逼台湾-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-    filter: '牛逼 \| 台湾 0[1-6]' # Ensure node names match exactly
-    # hidden: true
 
   - name: 香港-自动
     type: url-test
@@ -233,8 +284,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
-    # hidden: true
 
   - name: 台湾-自动
     type: url-test
@@ -243,8 +292,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)'
-    # hidden: true
 
   - name: 日本-自动
     type: url-test
@@ -253,8 +300,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
-    # hidden: true
 
   - name: 新加坡-自动
     type: url-test
@@ -263,8 +308,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
-    # hidden: true
 
   - name: 韩国-自动
     type: url-test
@@ -273,8 +316,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)'
-    # hidden: true
 
   - name: 美国-自动
     type: url-test
@@ -283,8 +324,6 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
-    # hidden: true
 
   - name: 其他-自动
     type: url-test
@@ -293,10 +332,8 @@ proxy-groups:
     lazy: true
     use:
       - Subscribe
-    filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
-    # hidden: true
 
-# 规则提供者 (Rule Providers) - Unchanged from previous version
+# 规则提供者，保持不变
 rule-providers:
   AI1:
     behavior: classical
@@ -384,14 +421,13 @@ rule-providers:
     interval: 86400
     url: https://raw.githubusercontent.com/Coldvvater/Mononoke/master/Stash/Rules/ProxyGFW.list
 
-# 规则 (Rules)
+# 规则
 rules:
 DOMAIN-SUFFIX,nanshanya.art,➡️ 国内
 DOMAIN-SUFFIX,nanshanya.xyz,➡️ 国内
 DOMAIN-SUFFIX,47010070.xyz,➡️ 国内
 DOMAIN-SUFFIX,sunpanel.nanshanya.art,➡️ 国内
 
-  # User Defined Rules
   - RULE-SET,AI1,👽 AI1
   - RULE-SET,AI2,👽 AI2
   - RULE-SET,GitHub,📘 GitHub
@@ -407,9 +443,8 @@ DOMAIN-SUFFIX,sunpanel.nanshanya.art,➡️ 国内
   - RULE-SET,国外_Check,🌍 国外
   - RULE-SET,国外_Proxy,🌍 国外
   - RULE-SET,国外_Global,🌍 国外
-  # Standard Rules
-  - RULE-SET,ProxyGFW,🌍 国外 # Use '国外' for GFW list now, or choose another default like '所有-自动'
-  - RULE-SET,CN_Mainland,DIRECT # Domains known to be in China -> DIRECT
-  - GEOIP,LAN,DIRECT         # Local network -> DIRECT
-  - GEOIP,CN,DIRECT          # China IP -> DIRECT
-  - MATCH,🌍 国外              # Unmatched traffic -> '国外' group (change if needed)
+  - RULE-SET,ProxyGFW,🌍 国外
+  - RULE-SET,CN_Mainland,DIRECT
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,🌍 国外

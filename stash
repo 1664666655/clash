@@ -386,6 +386,11 @@ rule-providers:
 
 # 规则 (Rules)
 rules:
+DOMAIN-SUFFIX,nanshanya.art,➡️ 国内
+DOMAIN-SUFFIX,nanshanya.xyz,➡️ 国内
+DOMAIN-SUFFIX,47010070.xyz,➡️ 国内
+DOMAIN-SUFFIX,sunpanel.nanshanya.art,➡️ 国内
+
   # User Defined Rules
   - RULE-SET,AI1,👽 AI1
   - RULE-SET,AI2,👽 AI2

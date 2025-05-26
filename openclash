@@ -1,369 +1,77 @@
-# ============================================================
-# my_template.yaml - 适用于 metacubex/subconverter
-# ============================================================
+# ===================================
+# 规则集 (Rule Providers)
+# ===================================
+# 用于定义不同服务或地区的域名列表
+# ===================================
 
-# ========================
-# 代理订阅提供者 (Proxy Providers)
-# ========================
-proxy-providers:
-  MainSubscription:
-    type: http
-    # 【核心修改点】这里使用了占位符，subconverter会自动替换它
-    url: "${subUrl}"
-    interval: 3600
-    path: ./main_subscription.yaml
-    health-check:
-      enable: true
-      url: http://www.gstatic.com/generate_204
-      interval: 300
+ruleset=👽 AI1,https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI.list
+ruleset=👽 AI2,https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI2.list
+ruleset=📘 GitHub,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GitHub/GitHub.list
+ruleset=👯‍♂️ TikTok,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/TikTok/TikTok.list
+ruleset=🙋 Telegram,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list
+ruleset=📀 流媒体,https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/YouTube.list
+ruleset=📀 流媒体,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.list
+ruleset=📀 流媒体,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/HBO/HBO.list
+ruleset=📀 流媒体,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list
+ruleset=📀 流媒体,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list
+ruleset=📀 流媒体,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.list  
+ruleset=📀 流媒体,https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/sping.list
+ruleset=🌍 国外,https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Check.list  
+ruleset=🌍 国外,https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Proxy.list  
+ruleset=🌍 国外,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Global/Global.list  
 
-# ========================
-# (Proxies)
-# ========================
-proxies:
-  - {name: 直连, type: direct}
-  - {name: 拒绝, type: reject}
+# ===================================
+# Emby 专属规则
+# ===================================
+DOMAIN,emby.yunti.online,📺 Emby
 
-# ========================
-# (General Settings)
-# ========================
-port: 7890
-socks-port: 7891
-mixed-port: 7893
-allow-lan: true
-mode: rule
-log-level: info
-external-controller: 0.0.0.0:9090
+# ===================================
+# 国内域名规则
+# ===================================
+DOMAIN-SUFFIX,nanshanya.art,➡️ 国内
+DOMAIN-SUFFIX,nanshanya.xyz,➡️ 国内
+DOMAIN-SUFFIX,47010070.xyz,➡️ 国内
+DOMAIN-SUFFIX,sunpanel.nanshanya.art,➡️ 国内
+ruleset=➡️ 国内,[]FINAL
 
-# ========================
-# (DNS Settings)
-# ========================
-dns:
-  enable: true
-  listen: 0.0.0.0:5353
-  ipv6: false
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-    - 114.114.114.114
-  fallback:
-    - tls://dns.google:853
-    - https://doh.pub/dns-query
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
-    ipcidr:
-      - 240.0.0.0/4
-    domain:
-      - +.google.com
+# ===================================
+# 策略组 (Proxy Groups) - 手动/自动选择
+# ===================================
+# 定义不同规则集所使用的节点策略
+# ===================================
 
-# ========================
-# 策略组 (Proxy Groups)
-# ========================
-default-select-policies: &default-select-policies
-  - 故障转移-香港
-  - 故障转移-台湾
-  - 故障转移-日本
-  - 故障转移-新加坡
-  - 故障转移-韩国
-  - 故障转移-美国
-  - 故障转移-其他地区
-  - 自动选择-所有节点
-  - 自动选择-港台日新韩
-  - 自动选择-台日新韩
-  - 直连
-  - 拒绝
+custom_proxy_group=📺 Emby`select`[]专线-手动`[]DIRECT`[]REJECT  
+custom_proxy_group=👽 AI1`select`[]DIRECT`[]所有-自动`[]港台日新韩-自动`[]台日新韩-自动`[]香港-自动`[]台湾-自动`[]日本-自动`[]新加坡-自动`[]韩国-自动`[]美国-自动`[]其他-自动`[]REJECT
+custom_proxy_group=👽 AI2`select`[]DIRECT`[]所有-自动`[]港台日新韩-自动`[]台日新韩-自动`[]香港-自动`[]台湾-自动`[]日本-自动`[]新加坡-自动`[]韩国-自动`[]美国-自动`[]其他-自动`[]REJECT
+custom_proxy_group=📘 GitHub`select`[]DIRECT`[]所有-自动`[]港台日新韩-自动`[]台日新韩-自动`[]香港-自动`[]台湾-自动`[]日本-自动`[]新加坡-自动`[]韩国-自动`[]美国-自动`[]其他-自动`[]REJECT
+custom_proxy_group=👯‍♂️ TikTok`select`[]DIRECT`[]所有-自动`[]港台日新韩-自动`[]台日新韩-自动`[]香港-自动`[]台湾-自动`[]日本-自动`[]新加坡-自动`[]韩国-自动`[]美国-自动`[]其他-自动`[]REJECT
+custom_proxy_group=🙋 Telegram`select`[]DIRECT`[]所有-自动`[]港台日新韩-自动`[]台日新韩-自动`[]香港-自动`[]台湾-自动`[]日本-自动`[]新加坡-自动`[]韩国-自动`[]美国-自动`[]其他-自动`[]REJECT
+custom_proxy_group=📀 流媒体`select`[]DIRECT`[]所有-自动`[]港台日新韩-自动`[]台日新韩-自动`[]香港-自动`[]台湾-自动`[]日本-自动`[]新加坡-自动`[]韩国-自动`[]美国-自动`[]其他-自动`[]REJECT
+custom_proxy_group=🌍 国外`select`[]DIRECT`[]所有-自动`[]港台日新韩-自动`[]牛逼台湾-自动`[]台日新韩-自动`[]香港-自动`[]台湾-自动`[]日本-自动`[]新加坡-自动`[]韩国-自动`[]美国-自动`[]其他-自动`[]REJECT
+custom_proxy_group=➡️ 国内`select`[]DIRECT`[]所有-自动`[]港台日新韩-自动`[]台日新韩-自动`[]香港-自动`[]台湾-自动`[]日本-自动`[]新加坡-自动`[]韩国-自动`[]美国-自动`[]其他-自动`[]REJECT
 
-proxy-groups:
-  - name: 👽 AI1
-    type: select
-    proxies: *default-select-policies
-  - name: 👽 AI2
-    type: select
-    proxies: *default-select-policies
-  - name: 📘 GitHub访问
-    type: select
-    proxies: *default-select-policies
-  - name: 👯‍♂️ TikTok专用
-    type: select
-    proxies:
-      - 自动选择-TikTok优化
-      - 故障转移-香港
-      - 故障转移-台湾
-      - 故障转移-日本
-      - 故障转移-新加坡
-      - 故障转移-韩国
-      - 故障转移-美国
-      - 故障转移-其他地区
-      - 自动选择-所有节点
-      - 自动选择-港台日新韩
-      - 自动选择-台日新韩
-      - 直连
-      - 拒绝
-  - name: 🙋 Telegram通讯
-    type: select
-    proxies: *default-select-policies
-  - name: 📀 流媒体服务
-    type: select
-    proxies: *default-select-policies
-  - name: 🌍 国外网站
-    type: select
-    proxies: *default-select-policies
-  - name: ➡️ 国内直连
-    type: select
-    proxies: [直连, 故障转移-香港]
+# ===================================
+# 节点组 (Node Groups) - 节点筛选
+# ===================================
+# 根据关键词筛选符合条件的节点
+# ===================================
 
-  - name: 故障转移-香港
-    type: fallback
-    proxies:
-      - 手动选择-香港
-      - 自动选择-香港
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: false
-  - name: 手动选择-香港
-    type: select
-    use: [MainSubscription]
-    filter: "(广港|香港|HK|Hong Kong|🇭🇰|HongKong)"
-    include-all-providers: true
-  - name: 自动选择-香港
-    type: url-test
-    use: [MainSubscription]
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    filter: "(广港|香港|HK|Hong Kong|🇭🇰|HongKong)"
+custom_proxy_group=专线-手动`select`(专线)
+custom_proxy_group=所有-自动`url-test`.*`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=港台日新韩-自动`url-test`(广港|广台|广日|广新|广韩|广美|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=台日新韩-自动`url-test`(广台|广日|广新|广韩|广美|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=牛逼台湾-自动`url-test`牛逼 \| 台湾 0[1-6]`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=香港-自动`url-test`(广港|香港|HK|Hong Kong|🇭🇰|HongKong)`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=台湾-自动`url-test`(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=日本-自动`url-test`(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=新加坡-自动`url-test`(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=韩国-自动`url-test`(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=美国-自动`url-test`(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)`http://www.gstatic.com/generate_204`60,150
+custom_proxy_group=其他-自动`url-test`(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)`http://www.gstatic.com/generate_204`60,150
 
-  - name: 故障转移-台湾
-    type: fallback
-    proxies:
-      - 手动选择-台湾
-      - 自动选择-台湾
-      - 自动选择-牛逼台湾
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: false
-  - name: 手动选择-台湾
-    type: select
-    use: [MainSubscription]
-    filter: "(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)"
-    include-all-providers: true
-  - name: 自动选择-台湾
-    type: url-test
-    use: [MainSubscription]
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    filter: "(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)"
+# ===================================
+# 规则集启用设置
+# ===================================
 
-  - name: 故障转移-日本
-    type: fallback
-    proxies:
-      - 手动选择-日本
-      - 自动选择-日本
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: false
-  - name: 手动选择-日本
-    type: select
-    use: [MainSubscription]
-    filter: "(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)"
-    include-all-providers: true
-  - name: 自动选择-日本
-    type: url-test
-    use: [MainSubscription]
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    filter: "(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)"
-
-  - name: 故障转移-新加坡
-    type: fallback
-    proxies:
-      - 手动选择-新加坡
-      - 自动选择-新加坡
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: false
-  - name: 手动选择-新加坡
-    type: select
-    use: [MainSubscription]
-    filter: "(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)"
-    include-all-providers: true
-  - name: 自动选择-新加坡
-    type: url-test
-    use: [MainSubscription]
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    filter: "(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)"
-
-  - name: 故障转移-韩国
-    type: fallback
-    proxies:
-      - 手动选择-韩国
-      - 自动选择-韩国
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: false
-  - name: 手动选择-韩国
-    type: select
-    use: [MainSubscription]
-    filter: "(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)"
-    include-all-providers: true
-  - name: 自动选择-韩国
-    type: url-test
-    use: [MainSubscription]
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    filter: "(广韩|韩国|韓國|KR|首尔|春川|🇰🇷|Korea)"
-
-  - name: 故障转移-美国
-    type: fallback
-    proxies:
-      - 手动选择-美国
-      - 自动选择-美国
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: false
-  - name: 手动选择-美国
-    type: select
-    use: [MainSubscription]
-    filter: "(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)"
-    include-all-providers: true
-  - name: 自动选择-美国
-    type: url-test
-    use: [MainSubscription]
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    filter: "(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)"
-
-  - name: 故障转移-其他地区
-    type: fallback
-    proxies:
-      - 手动选择-其他地区
-      - 自动选择-其他地区
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: false
-  - name: 手动选择-其他地区
-    type: select
-    use: [MainSubscription]
-    filter: "(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)"
-    include-all-providers: true
-  - name: 自动选择-其他地区
-    type: url-test
-    use: [MainSubscription]
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    filter: "(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)"
-
-  - name: 自动选择-所有节点
-    type: url-test
-    use: [MainSubscription]
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    include-all-providers: true
-  - name: 自动选择-港台日新韩
-    type: url-test
-    use: [MainSubscription]
-    filter: "(广港|广台|广日|广新|广韩|香港|HK|Hong Kong|🇭🇰|HongKong|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)"
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    include-all-providers: true
-  - name: 自动选择-台日新韩
-    type: url-test
-    use: [MainSubscription]
-    filter: "(广台|广日|广新|广韩|台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|新加坡|SG|坡|狮城|🇸🇬|Singapore|韩国|KR|首尔|春川|🇰🇷|Korea)"
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    include-all-providers: true
-  - name: 自动选择-牛逼台湾
-    type: url-test
-    use: [MainSubscription]
-    filter: "牛逼 \\| 台湾 0[1-6]"
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    include-all-providers: true
-  - name: 自动选择-TikTok优化
-    type: url-test
-    use: [MainSubscription]
-    filter: "(TikTok|抖音|US TikTok)"
-    url: http://www.gstatic.com/generate_204
-    interval: 600
-    tolerance: 150
-    include-all-providers: true
-
-# ========================
-# (Rule Providers)
-# ========================
-rule-provider-types:
-  text-classical: &text-classical
-    type: http
-    behavior: classical
-    format: text
-    interval: 86400
-
-rule-providers:
-  RuleAI1: {<<: *text-classical, url: "https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI.list"}
-  RuleAI2: {<<: *text-classical, url: "https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI2.list"}
-  RuleGitHub: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GitHub/GitHub.list"}
-  RuleTikTok: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/TikTok/TikTok.list"}
-  RuleTelegram: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list"}
-  RuleStreamingGeneral: {<<: *text-classical, url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/YouTube.list"}
-  RuleYouTube: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.list"}
-  RuleHBO: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/HBO/HBO.list"}
-  RuleDisney: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list"}
-  RuleNetflix: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list"}
-  RuleSpotify: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.list"}
-  RuleSpringLoading: {<<: *text-classical, url: "https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/sping.list"}
-  RuleForeignCheck: {<<: *text-classical, url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Check.list"}
-  RuleForeignProxy: {<<: *text-classical, url: "https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Proxy.list"}
-  RuleForeignGlobal: {<<: *text-classical, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Global/Global.list"}
-  RuleGeositeCN: {type: http, behavior: domain, format: text, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.txt", interval: 86400}
-  RuleGeoIPCN: {type: http, behavior: ipcidr, format: text, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.txt", interval: 86400}
-  RulePrivateNetwork: {type: http, behavior: domain, format: text, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.txt", interval: 86400}
-
-# ========================
-# 规则引擎 (Rules Engine)
-# ========================
-rules:
-  - DOMAIN,nanshanya.xyz,➡️ 国内直连
-  - DOMAIN,nanshanya.art,➡️ 国内直连
-  - DOMAIN,47010070.xyz,➡️ 国内直连
-  - DOMAIN,sunpanel.nanshanya.art,➡️ 国内直连
-  - RULE-SET,RuleAI1,👽 AI1
-  - RULE-SET,RuleAI2,👽 AI2
-  - RULE-SET,RuleGitHub,📘 GitHub访问
-  - RULE-SET,RuleTikTok,👯‍♂️ TikTok专用
-  - RULE-SET,RuleTelegram,🙋 Telegram通讯
-  - RULE-SET,RuleStreamingGeneral,📀 流媒体服务
-  - RULE-SET,RuleYouTube,📀 流媒体服务
-  - RULE-SET,RuleHBO,📀 流媒体服务
-  - RULE-SET,RuleDisney,📀 流媒体服务
-  - RULE-SET,RuleNetflix,📀 流媒体服务
-  - RULE-SET,RuleSpotify,📀 流媒体服务
-  - RULE-SET,RuleSpringLoading,📀 流媒体服务
-  - RULE-SET,RuleForeignCheck,🌍 国外网站
-  - RULE-SET,RuleForeignProxy,🌍 国外网站
-  - RULE-SET,RuleForeignGlobal,🌍 国外网站
-  - RULE-SET,RuleGeositeCN,➡️ 国内直连
-  - RULE-SET,RuleGeoIPCN,➡️ 国内直连,no-resolve
-  - RULE-SET,RulePrivateNetwork,➡️ 国内直连
-  - DOMAIN-SUFFIX,local,➡️ 国内直连
-  - IP-CIDR,192.168.0.0/16,➡️ 国内直连,no-resolve
-  - IP-CIDR,10.0.0.0/8,➡️ 国内直连,no-resolve
-  - IP-CIDR,172.16.0.0/12,➡️ 国内直连,no-resolve
-  - IP-CIDR,127.0.0.0/8,➡️ 国内直连,no-resolve
-  - IP-CIDR,198.18.0.0/16,➡️ 国内直连,no-resolve
-  - GEOIP,CN,➡️ 国内直连
-  - MATCH,🌍 国外网站
+enable_rule_generator=true
+overwrite_original_rules=true

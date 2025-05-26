@@ -29,23 +29,23 @@ custom_proxy_group=✈️ TG-固定节点`select`(^专线 香港 TG 2x 01$)
 # ===================================================================
 # [第二步] 核心 Scoped Smart 策略组
 # 创建多个 smart 组，每个都只在自己专属的“节点池”里进行智能选择。
-# 【重要修改】移除了这些策略组名称中的 Emoji
+# 【重要修改】修正了 smart 策略组成员的定义语法，移除了多余的 []
 # ===================================================================
 # AI 1 智能优选 (只在“家宽住宅”池里选)
-custom_proxy_group=AI1-智能优选`smart`[][Pool] AI1-家宽住宅`policy-priority=prefer-low-latency
+custom_proxy_group=AI1-智能优选`smart`[]\[Pool] AI1-家宽住宅\`policy-priority=prefer-low-latency
 # AI 2 智能优选 (只在“新加坡专线”池里选)
-custom_proxy_group=AI2-智能优选`smart`[][Pool] AI2-新加坡专线`policy-priority=prefer-low-latency
+custom_proxy_group=AI2-智能优选`smart`[]\[Pool] AI2-新加坡专线\`policy-priority=prefer-low-latency
 # 流媒体智能优选 (只在“解锁”池里选)
-custom_proxy_group=流媒体-智能优选`smart`[][Pool] 流媒体解锁`policy-priority=prefer-low-latency
+custom_proxy_group=流媒体-智能优选`smart`[]\[Pool] 流媒体解锁\`policy-priority=prefer-low-latency
 # 台湾智能优选 (只在“台湾”池里选)
-custom_proxy_group=台湾-智能优选`smart`[][Pool] 台湾节点`policy-priority=prefer-low-latency
+custom_proxy_group=台湾-智能优选`smart`[]\[Pool] 台湾节点\`policy-priority=prefer-low-latency
 # 全局智能优选 (在“所有节点”池里选)
-custom_proxy_group=全局-智能优选`smart`[][Pool] 全局节点`policy-priority=prefer-low-latency`
+custom_proxy_group=全局-智能优选`smart`[]\[Pool] 全局节点\`policy-priority=prefer-low-latency`
 
 # ===================================================================
 # [第三步] 最终应用分流总策略
 # 这是您在 OpenClash 界面上最终看到的、可以手动选择的策略组。
-# 【重要修改】确保引用的策略组名称与第二步中定义的一致 (不带 Emoji)
+# (此部分与 V5 保持一致，因为策略组名称未变)
 # ===================================================================
 # AI 1: 默认使用为您定制的“AI1-智能优选”
 custom_proxy_group=👽 AI1`select`[]AI1-智能优选`[]DIRECT`[]REJECT

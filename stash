@@ -29,35 +29,37 @@ custom_proxy_group=✈️ TG-固定节点`select`(^专线 香港 TG 2x 01$)
 # ===================================================================
 # [第二步] 核心 Scoped Smart 策略组
 # 创建多个 smart 组，每个都只在自己专属的“节点池”里进行智能选择。
+# 【重要修改】移除了这些策略组名称中的 Emoji
 # ===================================================================
 # AI 1 智能优选 (只在“家宽住宅”池里选)
-custom_proxy_group=🧠 AI1-智能优选`smart`[][Pool] AI1-家宽住宅`policy-priority=prefer-low-latency
+custom_proxy_group=AI1-智能优选`smart`[][Pool] AI1-家宽住宅`policy-priority=prefer-low-latency
 # AI 2 智能优选 (只在“新加坡专线”池里选)
-custom_proxy_group=🧠 AI2-智能优选`smart`[][Pool] AI2-新加坡专线`policy-priority=prefer-low-latency
+custom_proxy_group=AI2-智能优选`smart`[][Pool] AI2-新加坡专线`policy-priority=prefer-low-latency
 # 流媒体智能优选 (只在“解锁”池里选)
-custom_proxy_group=🧠 流媒体-智能优选`smart`[][Pool] 流媒体解锁`policy-priority=prefer-low-latency
+custom_proxy_group=流媒体-智能优选`smart`[][Pool] 流媒体解锁`policy-priority=prefer-low-latency
 # 台湾智能优选 (只在“台湾”池里选)
-custom_proxy_group=🧠 台湾-智能优选`smart`[][Pool] 台湾节点`policy-priority=prefer-low-latency
+custom_proxy_group=台湾-智能优选`smart`[][Pool] 台湾节点`policy-priority=prefer-low-latency
 # 全局智能优选 (在“所有节点”池里选)
-custom_proxy_group=🧠 全局-智能优选`smart`[][Pool] 全局节点`policy-priority=prefer-low-latency`
+custom_proxy_group=全局-智能优选`smart`[][Pool] 全局节点`policy-priority=prefer-low-latency`
 
 # ===================================================================
 # [第三步] 最终应用分流总策略
 # 这是您在 OpenClash 界面上最终看到的、可以手动选择的策略组。
+# 【重要修改】确保引用的策略组名称与第二步中定义的一致 (不带 Emoji)
 # ===================================================================
 # AI 1: 默认使用为您定制的“AI1-智能优选”
-custom_proxy_group=👽 AI1`select`[]🧠 AI1-智能优选`[]DIRECT`[]REJECT
+custom_proxy_group=👽 AI1`select`[]AI1-智能优选`[]DIRECT`[]REJECT
 # AI 2: 默认使用为您定制的“AI2-智能优选”
-custom_proxy_group=👽 AI2`select`[]🧠 AI2-智能优选`[]DIRECT`[]REJECT
+custom_proxy_group=👽 AI2`select`[]AI2-智能优选`[]DIRECT`[]REJECT
 # Telegram: 固定节点
 custom_proxy_group=🙋 Telegram`select`[]✈️ TG-固定节点`[]DIRECT`[]REJECT
 # 流媒体: 默认使用“流媒体-智能优选”
-custom_proxy_group=📀 流媒体`select`[]🧠 流媒体-智能优选`[]🧠 全局-智能优选`[]DIRECT`[]REJECT
+custom_proxy_group=📀 流媒体`select`[]流媒体-智能优选`[]全局-智能优选`[]DIRECT`[]REJECT
 # 国外: 您可以手动在“全局智能”和“台湾智能”之间切换
-custom_proxy_group=🌍 国外`select`[]🧠 全局-智能优选`[]🧠 台湾-智能优选`[]DIRECT`[]REJECT
+custom_proxy_group=🌍 国外`select`[]全局-智能优选`[]台湾-智能优选`[]DIRECT`[]REJECT
 # 其他默认使用全局智能
-custom_proxy_group=📘 GitHub`select`[]🧠 全局-智能优选`[]DIRECT`[]REJECT
-custom_proxy_group=👯‍♂️ TikTok`select`[]🧠 全局-智能优选`[]DIRECT`[]REJECT
+custom_proxy_group=📘 GitHub`select`[]全局-智能优选`[]DIRECT`[]REJECT
+custom_proxy_group=👯‍♂️ TikTok`select`[]全局-智能优选`[]DIRECT`[]REJECT
 # Emby 备用
 custom_proxy_group=📺 Emby`select`[]DIRECT`[]REJECT
 # 国内直连

@@ -24,6 +24,7 @@ ruleset=🌍 国外,https://raw.githubusercontent.com/blackmatrix7/ios_rule_scri
 # Emby 专属规则
 # ===================================
 DOMAIN,emby.yunti.online,📺 Emby
+DOMAIN-SUFFIX,cf.yunti.online,📺 Emby
 
 # ===================================
 # 国内域名规则

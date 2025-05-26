@@ -11,41 +11,39 @@ ruleset=🌍 国外,https://raw.githubusercontent.com/blackmatrix7/ios_rule_scri
 
 # ===================================================================
 # [第一步] 底层节点筛选池 (Node Filtering Pools)
-# 这里只做筛选，定义好每个智能策略组可以从哪些节点里选。
+# 【V8 修改】移除了节点池名称中的特殊字符 "[]"
 # ===================================================================
 # AI 1 的节点池: 家宽、住宅
-custom_proxy_group=[Pool] AI1-家宽住宅`url-test`(?i)家宽|住宅`http://www.gstatic.com/generate_204`300,150
+custom_proxy_group=Pool-AI1-家宽住宅`url-test`(?i)家宽|住宅`http://www.gstatic.com/generate_204`300,150
 # AI 2 的节点池: 专线 新加坡
-custom_proxy_group=[Pool] AI2-新加坡专线`url-test`(?i)专线 新加坡`http://www.gstatic.com/generate_204`300,150
+custom_proxy_group=Pool-AI2-新加坡专线`url-test`(?i)专线 新加坡`http://www.gstatic.com/generate_204`300,150
 # 流媒体的节点池: 广告、流媒体、解锁
-custom_proxy_group=[Pool] 流媒体解锁`url-test`(?i)广告|流媒体|解锁`http://www.gstatic.com/generate_204`300,150
+custom_proxy_group=Pool-流媒体解锁`url-test`(?i)广告|流媒体|解锁`http://www.gstatic.com/generate_204`300,150
 # 台湾优选的节点池
-custom_proxy_group=[Pool] 台湾节点`url-test`(?i)台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan`http://www.gstatic.com/generate_204`300,150
+custom_proxy_group=Pool-台湾节点`url-test`(?i)台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan`http://www.gstatic.com/generate_204`300,150
 # 全局优选的节点池 (包含所有节点)
-custom_proxy_group=[Pool] 全局节点`url-test`.*`http://www.gstatic.com/generate_204`300,150
+custom_proxy_group=Pool-全局节点`url-test`.*`http://www.gstatic.com/generate_204`300,150
 # TG 固定节点 (这个比较特殊，直接筛选)
 custom_proxy_group=✈️ TG-固定节点`select`(^专线 香港 TG 2x 01$)
 
 # ===================================================================
 # [第二步] 核心 Scoped Smart 策略组
-# 创建多个 smart 组，每个都只在自己专属的“节点池”里进行智能选择。
-# 【V7 重要修改】移除了 smart 类型声明后多余的 []
+# 【V8 修改】暂时移除了 policy-priority 参数，并使用新的节点池名称
 # ===================================================================
 # AI 1 智能优选 (只在“家宽住宅”池里选)
-custom_proxy_group=AI1-智能优选`smart`\[Pool] AI1-家宽住宅\`policy-priority=prefer-low-latency
+custom_proxy_group=AI1-智能优选`smart`Pool-AI1-家宽住宅
 # AI 2 智能优选 (只在“新加坡专线”池里选)
-custom_proxy_group=AI2-智能优选`smart`\[Pool] AI2-新加坡专线\`policy-priority=prefer-low-latency
+custom_proxy_group=AI2-智能优选`smart`Pool-AI2-新加坡专线
 # 流媒体智能优选 (只在“解锁”池里选)
-custom_proxy_group=流媒体-智能优选`smart`\[Pool] 流媒体解锁\`policy-priority=prefer-low-latency
+custom_proxy_group=流媒体-智能优选`smart`Pool-流媒体解锁
 # 台湾智能优选 (只在“台湾”池里选)
-custom_proxy_group=台湾-智能优选`smart`\[Pool] 台湾节点\`policy-priority=prefer-low-latency
+custom_proxy_group=台湾-智能优选`smart`Pool-台湾节点
 # 全局智能优选 (在“所有节点”池里选)
-custom_proxy_group=全局-智能优选`smart`\[Pool] 全局节点\`policy-priority=prefer-low-latency`
+custom_proxy_group=全局-智能优选`smart`Pool-全局节点
 
 # ===================================================================
 # [第三步] 最终应用分流总策略
-# 这是您在 OpenClash 界面上最终看到的、可以手动选择的策略组。
-# (此部分与 V6 保持一致，因为策略组名称未变)
+# (此部分与 V7 保持一致，因为策略组名称未变，只是确保它们能被正确创建)
 # ===================================================================
 # AI 1: 默认使用为您定制的“AI1-智能优选”
 custom_proxy_group=👽 AI1`select`[]AI1-智能优选`[]DIRECT`[]REJECT

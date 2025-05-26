@@ -1,450 +1,70 @@
-mode: rule
-log-level: info
+# ===================================================================
+# 规则集定义 (Rule Providers) - 此部分保持不变
+# ===================================================================
+ruleset=👽 AI1,https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI.list
+ruleset=👽 AI2,https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI2.list
+ruleset=📘 GitHub,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GitHub/GitHub.list
+ruleset=👯‍♂️ TikTok,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/TikTok/TikTok.list
+ruleset=🙋 Telegram,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list
+ruleset=📀 流媒体,https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/YouTube.list
+ruleset=🌍 国外,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Global/Global.list
 
-dns:
-  default-nameserver:
-    - 119.29.29.29
-    - 223.5.5.5
-    - 8.8.8.8
-  nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-    - https://dns.cloudflare.com/dns-query
-    - https://dns.google/dns-query
-  fake-ip-filter:
-    - "*"
-    - "+.lan"
-    - "+.local"
+# ===================================================================
+# [第一步] 底层节点筛选池 (Node Filtering Pools)
+# 这里只做筛选，定义好每个智能策略组可以从哪些节点里选。
+# ===================================================================
+# AI 1 的节点池: 家宽、住宅
+custom_proxy_group=[Pool] AI1-家宽住宅`url-test`(?i)家宽|住宅`http://www.gstatic.com/generate_204`300,150
+# AI 2 的节点池: 专线 新加坡
+custom_proxy_group=[Pool] AI2-新加坡专线`url-test`(?i)专线 新加坡`http://www.gstatic.com/generate_204`300,150
+# 流媒体的节点池: 广告、流媒体、解锁
+custom_proxy_group=[Pool] 流媒体解锁`url-test`(?i)广告|流媒体|解锁`http://www.gstatic.com/generate_204`300,150
+# 台湾优选的节点池
+custom_proxy_group=[Pool] 台湾节点`url-test`(?i)台湾|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan`http://www.gstatic.com/generate_204`300,150
+# 全局优选的节点池 (包含所有节点)
+custom_proxy_group=[Pool] 全局节点`url-test`.*`http://www.gstatic.com/generate_204`300,150
+# TG 固定节点 (这个比较特殊，直接筛选)
+custom_proxy_group=✈️ TG-固定节点`select`(^专线 香港 TG 2x 01$)
 
-proxy-providers:
-  Subscribe:
-    url: http://your-subscription-url
-    interval: 86400
-    benchmark-url: http://www.gstatic.com/generate_204
-    benchmark-timeout: 5
+# ===================================================================
+# [第二步] 核心 Scoped Smart 策略组
+# 创建多个 smart 组，每个都只在自己专属的“节点池”里进行智能选择。
+# ===================================================================
+# AI 1 智能优选 (只在“家宽住宅”池里选)
+custom_proxy_group=🧠 AI1-智能优选`smart`[][Pool] AI1-家宽住宅`policy-priority=prefer-low-latency
+# AI 2 智能优选 (只在“新加坡专线”池里选)
+custom_proxy_group=🧠 AI2-智能优选`smart`[][Pool] AI2-新加坡专线`policy-priority=prefer-low-latency
+# 流媒体智能优选 (只在“解锁”池里选)
+custom_proxy_group=🧠 流媒体-智能优选`smart`[][Pool] 流媒体解锁`policy-priority=prefer-low-latency
+# 台湾智能优选 (只在“台湾”池里选)
+custom_proxy_group=🧠 台湾-智能优选`smart`[][Pool] 台湾节点`policy-priority=prefer-low-latency
+# 全局智能优选 (在“所有节点”池里选)
+custom_proxy_group=🧠 全局-智能优选`smart`[][Pool] 全局节点`policy-priority=prefer-low-latency`
 
-proxy-groups:
-  # --- 地区 Fallback 组 ---
-  - name: 美国-fallback
-    type: fallback
-    use:
-      - Subscribe
-    filter: '(广美|美|US|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States)'
+# ===================================================================
+# [第三步] 最终应用分流总策略
+# 这是您在 OpenClash 界面上最终看到的、可以手动选择的策略组。
+# ===================================================================
+# AI 1: 默认使用为您定制的“AI1-智能优选”
+custom_proxy_group=👽 AI1`select`[]🧠 AI1-智能优选`[]DIRECT`[]REJECT
+# AI 2: 默认使用为您定制的“AI2-智能优选”
+custom_proxy_group=👽 AI2`select`[]🧠 AI2-智能优选`[]DIRECT`[]REJECT
+# Telegram: 固定节点
+custom_proxy_group=🙋 Telegram`select`[]✈️ TG-固定节点`[]DIRECT`[]REJECT
+# 流媒体: 默认使用“流媒体-智能优选”
+custom_proxy_group=📀 流媒体`select`[]🧠 流媒体-智能优选`[]🧠 全局-智能优选`[]DIRECT`[]REJECT
+# 国外: 您可以手动在“全局智能”和“台湾智能”之间切换
+custom_proxy_group=🌍 国外`select`[]🧠 全局-智能优选`[]🧠 台湾-智能优选`[]DIRECT`[]REJECT
+# 其他默认使用全局智能
+custom_proxy_group=📘 GitHub`select`[]🧠 全局-智能优选`[]DIRECT`[]REJECT
+custom_proxy_group=👯‍♂️ TikTok`select`[]🧠 全局-智能优选`[]DIRECT`[]REJECT
+# Emby 备用
+custom_proxy_group=📺 Emby`select`[]DIRECT`[]REJECT
+# 国内直连
+custom_proxy_group=➡️ 国内`select`[]DIRECT`[]REJECT
 
-  - name: 香港-fallback
-    type: fallback
-    use:
-      - Subscribe
-    filter: '(广港|香港|HK|Hong Kong|🇭🇰|HongKong)'
-
-  - name: 台湾-fallback
-    type: fallback
-    use:
-      - Subscribe
-    filter: '(广台|台湾|台灣|TW|Tai Wan|🇹🇼|TaiWan|Taiwan)'
-
-  - name: 日本-fallback
-    type: fallback
-    use:
-      - Subscribe
-    filter: '(广日|日本|JP|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan)'
-
-  - name: 新加坡-fallback
-    type: fallback
-    use:
-      - Subscribe
-    filter: '(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)'
-
-  - name: 韩国-fallback
-    type: fallback
-    use:
-      - Subscribe
-    filter: '(广韩|韩国|KR|首尔|春川|🇰🇷|Korea)'
-
-  - name: 其他-fallback
-    type: fallback
-    use:
-      - Subscribe
-    filter: '(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)'
-
-  # --- 功能组 (每组带 Fallback) ---
-  - name: 👽 AI1
-    type: select
-    proxies:
-      - 美国-fallback
-      - 香港-fallback
-      - 日本-fallback
-      - 台湾-fallback
-      - 新加坡-fallback
-      - 韩国-fallback
-      - 其他-fallback
-      - DIRECT
-      - 所有-自动
-      - 港台日新韩-自动
-      - 台日新韩-自动
-      - 香港-自动
-      - 台湾-自动
-      - 日本-自动
-      - 新加坡-自动
-      - 韩国-自动
-      - 美国-自动
-      - 其他-自动
-      - REJECT
-
-  - name: 👽 AI2
-    type: select
-    proxies:
-      - 美国-fallback
-      - 新加坡-fallback
-      - 香港-fallback
-      - 日本-fallback
-      - 台湾-fallback
-      - 韩国-fallback
-      - 其他-fallback
-      - DIRECT
-      - 所有-自动
-      - 港台日新韩-自动
-      - 台日新韩-自动
-      - 香港-自动
-      - 台湾-自动
-      - 日本-自动
-      - 新加坡-自动
-      - 韩国-自动
-      - 美国-自动
-      - 其他-自动
-      - REJECT
-
-  - name: 📘 GitHub
-    type: select
-    proxies:
-      - 香港-fallback
-      - 台湾-fallback
-      - 日本-fallback
-      - 新加坡-fallback
-      - 美国-fallback
-      - 韩国-fallback
-      - 其他-fallback
-      - DIRECT
-      - 所有-自动
-      - 港台日新韩-自动
-      - 台日新韩-自动
-      - 香港-自动
-      - 台湾-自动
-      - 日本-自动
-      - 新加坡-自动
-      - 韩国-自动
-      - 美国-自动
-      - 其他-自动
-      - REJECT
-
-  - name: 👯‍♂️ TikTok
-    type: select
-    proxies:
-      - 台湾-fallback
-      - 日本-fallback
-      - 新加坡-fallback
-      - 美国-fallback
-      - 香港-fallback
-      - 韩国-fallback
-      - 其他-fallback
-      - DIRECT
-      - 所有-自动
-      - 港台日新韩-自动
-      - 台日新韩-自动
-      - 香港-自动
-      - 台湾-自动
-      - 日本-自动
-      - 新加坡-自动
-      - 韩国-自动
-      - 美国-自动
-      - 其他-自动
-      - REJECT
-
-  - name: 🙋 Telegram
-    type: select
-    proxies:
-      - 香港-fallback
-      - 日本-fallback
-      - 新加坡-fallback
-      - 美国-fallback
-      - 台湾-fallback
-      - 韩国-fallback
-      - 其他-fallback
-      - DIRECT
-      - 所有-自动
-      - 港台日新韩-自动
-      - 台日新韩-自动
-      - 香港-自动
-      - 台湾-自动
-      - 日本-自动
-      - 新加坡-自动
-      - 韩国-自动
-      - 美国-自动
-      - 其他-自动
-      - REJECT
-
-  - name: 📀 流媒体
-    type: select
-    proxies:
-      - 香港-fallback
-      - 日本-fallback
-      - 新加坡-fallback
-      - 台湾-fallback
-      - 美国-fallback
-      - 韩国-fallback
-      - 其他-fallback
-      - DIRECT
-      - 所有-自动
-      - 港台日新韩-自动
-      - 台日新韩-自动
-      - 香港-自动
-      - 台湾-自动
-      - 日本-自动
-      - 新加坡-自动
-      - 韩国-自动
-      - 美国-自动
-      - 其他-自动
-      - REJECT
-
-  - name: 🌍 国外
-    type: select
-    proxies:
-      - 美国-fallback
-      - 香港-fallback
-      - 台湾-fallback
-      - 日本-fallback
-      - 新加坡-fallback
-      - 韩国-fallback
-      - 其他-fallback
-      - DIRECT
-      - 所有-自动
-      - 港台日新韩-自动
-      - 台日新韩-自动
-      - 香港-自动
-      - 台湾-自动
-      - 日本-自动
-      - 新加坡-自动
-      - 韩国-自动
-      - 美国-自动
-      - 其他-自动
-      - REJECT
-
-  - name: ➡️ 国内
-    type: select
-    proxies:
-      - DIRECT
-      - 香港-fallback
-      - 台湾-fallback
-      - 日本-fallback
-      - 新加坡-fallback
-      - 美国-fallback
-      - 韩国-fallback
-      - 其他-fallback
-      - 所有-自动
-      - 港台日新韩-自动
-      - 台日新韩-自动
-      - 香港-自动
-      - 台湾-自动
-      - 日本-自动
-      - 新加坡-自动
-      - 韩国-自动
-      - 美国-自动
-      - 其他-自动
-      - REJECT
-
-  # --- 现有自动分组，保留原有功能 ---
-  - name: 所有-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 港台日新韩-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 台日新韩-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 香港-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 台湾-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 日本-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 新加坡-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 韩国-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 美国-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-  - name: 其他-自动
-    type: url-test
-    url: http://www.gstatic.com/generate_204
-    interval: 300
-    lazy: true
-    use:
-      - Subscribe
-
-# 规则提供者，保持不变
-rule-providers:
-  AI1:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI.list
-  AI2:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/AI2.list
-  GitHub:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/GitHub/GitHub.list
-  TikTok:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/TikTok/TikTok.list
-  Telegram:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list
-  流媒体_YouTube1:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/YouTube.list
-  流媒体_YouTube2:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.list
-  流媒体_HBO:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/HBO/HBO.list
-  流媒体_Disney:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list
-  流媒体_Netflix:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list
-  流媒体_Spotify:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.list
-  流媒体_Sping:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/1664666655/clash/refs/heads/main/list/sping.list
-  国外_Check:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Check.list
-  国外_Proxy:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/liandu2024/clash/refs/heads/main/list/Proxy.list
-  国外_Global:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Global/Global.list
-  CN_Mainland:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/Coldvvater/Mononoke/master/Stash/Rules/ChinaDomain.list
-  ProxyGFW:
-    behavior: classical
-    format: text
-    interval: 86400
-    url: https://raw.githubusercontent.com/Coldvvater/Mononoke/master/Stash/Rules/ProxyGFW.list
-
-# 规则
-rules:
-DOMAIN-SUFFIX,nanshanya.art,➡️ 国内
-DOMAIN-SUFFIX,nanshanya.xyz,➡️ 国内
-DOMAIN-SUFFIX,47010070.xyz,➡️ 国内
-DOMAIN-SUFFIX,sunpanel.nanshanya.art,➡️ 国内
-
-  - RULE-SET,AI1,👽 AI1
-  - RULE-SET,AI2,👽 AI2
-  - RULE-SET,GitHub,📘 GitHub
-  - RULE-SET,TikTok,👯‍♂️ TikTok
-  - RULE-SET,Telegram,🙋 Telegram
-  - RULE-SET,流媒体_YouTube1,📀 流媒体
-  - RULE-SET,流媒体_YouTube2,📀 流媒体
-  - RULE-SET,流媒体_HBO,📀 流媒体
-  - RULE-SET,流媒体_Disney,📀 流媒体
-  - RULE-SET,流媒体_Netflix,📀 流媒体
-  - RULE-SET,流媒体_Spotify,📀 流媒体
-  - RULE-SET,流媒体_Sping,📀 流媒体
-  - RULE-SET,国外_Check,🌍 国外
-  - RULE-SET,国外_Proxy,🌍 国外
-  - RULE-SET,国外_Global,🌍 国外
-  - RULE-SET,ProxyGFW,🌍 国外
-  - RULE-SET,CN_Mainland,DIRECT
-  - GEOIP,LAN,DIRECT
-  - GEOIP,CN,DIRECT
-  - MATCH,🌍 国外
+# ===================================================================
+# 启用设置
+# ===================================================================
+enable_rule_generator=true
+overwrite_original_rules=true

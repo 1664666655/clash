@@ -73,7 +73,7 @@ custom_proxy_group=🇺🇸 美国-专线-手动`select`(?=.*(专线|IPLC|游戏
 custom_proxy_group=🇺🇸 美国-常规-手动`select`(?!(.*(专线|IPLC|游戏|游戏加速|Game|Gaming|优质|VIP|Premium|Pro|Business|Enterprise)))(?=.*(广美|美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States))
 custom_proxy_group=🇺🇸 美国-住宅-手动`select`(?=.*(住宅|家宽|ISP|Residential))(?=.*(广美|美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|硅谷|拉斯|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States))
 
-custom_proxy_group=美国-手动`select`[]🇺🇸 美国-专线-手动`[]🇺🇸 美国-常规-手动`[]🇺🇸 美国-住宅-手动 # 这里列出所有美国地区的特性分类子策略组
+custom_proxy_group=美国-手动`select`[]🇺🇸 美国-专线-手动`[]🇺🇸 美国-常规-手动`[]🇺🇸 美国-住宅-手动
 # --- 其他地区手动选择 ---
 custom_proxy_group=其他-手动`select`(波|柬|尼|也|克|比|尔|立|冰|秘|耳|利|埃|希|孟|芬|愛|澳|英|德|南|意|法|拿|墨|印|越|俄|瑞|智|荷|比|巴|沙|班|泰|德|烏|以|Australia|Konghwaguk)
 custom_proxy_group=住宅家宽-手动`select`(?=.*(住宅|家宽)) # 全局的住宅家宽选择
